@@ -20,8 +20,14 @@ public class PathTest implements PathModel {
         Path p;
 
 
-        Node tmpNode;
-        Edge tmpEdge;
+
+
+        
+        Node lastPeekNode;
+        Edge lastPeekEdge;
+
+        Node lastPopNode;
+        Edge lastPopEdge;
 
         Graph graph;
 
@@ -37,14 +43,28 @@ public class PathTest implements PathModel {
             assertThrows(IllegalArgumentException.class, () -> { throw ex; });
         }
         public void v_NotContainsEdge(){}
-        public void v_InvalidHead(){}
-        public void v_EmptyStack(){}
-        public void v_Peeked(){}
+        public void v_InvalidHead(){
+
+        }
+        public void v_EmptyStack(){
+            Exception ex = this.helper.getCapturedException();
+            assertThrows(EmptyStackException.class, () -> { throw ex; });
+        }
+        public void v_Peeked(){
+            //Eu não me orgulho disso
+            if(this.lastPeekEdge == helper.lastPeekEdge && this.lastPeekNode == this.lastPeekNode){
+                assertTrue(true);
+            }
+
+            assertTrue(false);
+        }
         public void v_EmptyEdgePopException(){}
-        public void v_PopEdge(){}
+        public void v_PopEdge(){
+            assertEquals(this.lastPopEdge,helper.lastPopEdge);
+        }
         public void v_EmptyNodePopException(){}
         public void v_PopNode(){
-
+            assertEquals(this.lastPopNode,helper.lastPopNode);
         }
         public void v_Start(){
             assertNull(this.p);
@@ -52,10 +72,6 @@ public class PathTest implements PathModel {
         public void v_Path(){
             //Transitório
         }
-
-
-
-
 
         public void e_CreatePath(){
             this.p = new Path();
@@ -85,55 +101,57 @@ public class PathTest implements PathModel {
 
         }
         public void e_PeekEdge(){
-            this.helper.setCapturedException(null);
-            try
-            {   
-               helper.PeekEdge(p.peekEdge());
-            }
-            catch (Exception ex)
-            {
-                this.helper.setCapturedException(ex);
-            }
+ 
+            this.lastPeekEdge =p.peekEdge();
+            helper.PeekEdge();
+
         }
         public void e_PeekNode(){
 
-            this.helper.setCapturedException(null);
-            try
-            {   
-               helper.PeekNode(p.peekNode());
-            }
-            catch (Exception ex)
-            {
-                this.helper.setCapturedException(ex);
-            }
+            this.lastPeekNode = p.peekNode();
+            helper.PeekNode();
+
         }
-        public void e_PopWhileEmptyEdge(){}
-        public void e_PopWhileEmptyNode(){}
         public void e_PopEdge(){
             
-            this.helper.setCapturedException(null);
-            try
-            {   
-               helper.PopEdge(p.popEdge());
-            }
-            catch (Exception ex)
-            {
-                this.helper.setCapturedException(ex);
-            }
+
+            this.lastPopEdge = p.popEdge();
+            helper.PopEdge();
+    
 
         }
         public void e_PopNode(){
 
+            this.lastPopNode =p.popNode();
+            helper.PopNode();
+
+        }
+        public void e_PopWhileEmptyEdge(){
             this.helper.setCapturedException(null);
             try
             {   
-               helper.PopNode(p.popNode());
+                p.popEdge();
             }
             catch (Exception ex)
             {
                 this.helper.setCapturedException(ex);
             }
+
         }
+        public void e_PopWhileEmptyNode(){
+
+            this.helper.setCapturedException(null);
+            try
+            {   
+                p.popNode();
+            }
+            catch (Exception ex)
+            {
+                this.helper.setCapturedException(ex);
+            }
+
+        }
+
 
         
     

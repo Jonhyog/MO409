@@ -40,23 +40,28 @@ public class PathHelper {
 
 		return graph;
 	}
+    public void addEdge(Edge edge){
+
+    }
     private Node getPathHead(){
     }
 
-    public void PeekEdge(Edge e){
-        this.lastPeekEdge = e;
+    public void PeekEdge(){
+        this.lastPeekEdge = edgePath.peek();
     }
-    public void PeekNode(Node n){
-        this.lastPeekNode = n;
+    public void PeekNode(){
+        this.lastPeekNode = nodePath.peek();
     }
-    public void PopEdge(Edge e){
+    public void PopEdge(){
         this.lastPopNode = this.nodePath.pop();
-        this.lastPopEdge = this.edgePath.pop();
+        this.lastPopEdge this.edgePath.pop();
+
         
     }
     public void PopNode(){
-        this.lastPopEdge = this.edgePath.pop();
         this.lastPopNode = this.nodePath.pop();
+        this.lastPopEdge this.edgePath.pop();
+
     }
 
     }
