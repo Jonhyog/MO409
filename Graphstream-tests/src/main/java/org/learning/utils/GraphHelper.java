@@ -144,4 +144,7 @@ public class GraphHelper {
     public Exception getCapturedException() {
         return this.capturedException;
     }
+    public String getEdgeId(Edge e){
+        return e.toString().split("\\[")[0];
+    }
 }

@@ -39,7 +39,7 @@ public class SingleGraphTest implements SingleGraphModel {
         Node vertex = this.helper.getLastNode();
 
         assertNotNull(vertex);
-        // assertEquals(vertex.toString(), nodeId) TODO: Verificar IDs
+        // assertEquals(vertex.toString(), nodeId) TODO: Verificar IDsMultiGrapaddE
     }
 
     public void v_EdgeCreated() {
@@ -93,8 +93,8 @@ public class SingleGraphTest implements SingleGraphModel {
 
     public void e_GetEdge() {
         this.edgeHelper = this.helper.getRandomEdge();
-        // Edge.toSting return <edge-id>[node1--node2] so string must be parsed
-        this.edgeGraph = this.g.getEdge(this.edgeHelper.toString().split("\\[")[0]);
+        // Edge.toString return <edge-id>[node1--node2] so string must be parsed
+        this.edgeGraph = this.g.getEdge(helper.getEdgeId(this.edgeHelper));
     }
 
     @Override
@@ -129,7 +129,7 @@ public class SingleGraphTest implements SingleGraphModel {
 
         try
         {
-            String edgeID = e.toString().split("\\[")[0];
+            String edgeID = helper.getEdgeId(e);
             this.g.addEdge(edgeID, e.getNode0(), e.getNode1());
         }
         catch (Exception ex)
