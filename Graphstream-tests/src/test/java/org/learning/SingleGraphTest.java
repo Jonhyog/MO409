@@ -99,6 +99,7 @@ public class SingleGraphTest implements SingleGraphModel {
 
     @Override
     public void e_RemoveNonexistentNode() {
+        this.helper.setCapturedException(null);
         try
         {
             this.g.removeNode(this.helper.nextId());
@@ -112,6 +113,7 @@ public class SingleGraphTest implements SingleGraphModel {
     @Override
     public void e_AddExistentNode() {
         Node n = this.helper.getRandomNode();
+        this.helper.setCapturedException(null);
 
         try
         {
@@ -126,6 +128,7 @@ public class SingleGraphTest implements SingleGraphModel {
     @Override
     public void e_AddExistentEdge() {
         Edge e = this.helper.getRandomEdge();
+        this.helper.setCapturedException(null);
 
         try
         {
@@ -140,6 +143,7 @@ public class SingleGraphTest implements SingleGraphModel {
 
     @Override
     public void e_RemoveNonexistentEdge() {
+        this.helper.setCapturedException(null);
         try
         {
             this.g.removeEdge(this.helper.nextId());

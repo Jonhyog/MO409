@@ -31,7 +31,10 @@ public class MultiGraphTest implements MultiGraphModel {
     }
 
     public void v_NodeNotExists() {
+        //Verifica se há uma exceção e se ela foi gerada pelo erro
+        Exception ex = this.helper.getCapturedException();
 
+        assertThrows(ElementNotFoundException.class, () -> { throw ex; });
     }
 
     public void v_NodeCreated() {
@@ -103,6 +106,7 @@ public class MultiGraphTest implements MultiGraphModel {
 
     @Override
     public void e_RemoveNonexistentNode() {
+        this.helper.setCapturedException(null);
         try
         {   
             //Remove um nó que não existe pois nextId não existe
@@ -119,6 +123,7 @@ public class MultiGraphTest implements MultiGraphModel {
     public void e_AddExistentNode() {
         //Pega um nó que já existe
         Node n = this.helper.getRandomNode();
+        this.helper.setCapturedException(null);
         try
         {   //Tenta adicionar
             this.g.addNode(n.toString());
@@ -132,6 +137,7 @@ public class MultiGraphTest implements MultiGraphModel {
     @Override
     public void e_AddExistentEdge() {
         Edge e = this.helper.getRandomEdge();
+        this.helper.setCapturedException(null);
 
         try
         {
@@ -146,6 +152,7 @@ public class MultiGraphTest implements MultiGraphModel {
 
     @Override
     public void e_RemoveNonexistentEdge() {
+        this.helper.setCapturedException(null);
         try
         {
             this.g.removeEdge(this.helper.nextId());
