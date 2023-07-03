@@ -38,7 +38,10 @@ public class MultiGraphTest implements MultiGraphModel {
     }
 
     public void v_NodeCreated() {
+        Node vertex = this.helper.getLastNode();
 
+        assertNotNull(vertex);
+        // assertEquals(vertex.toString(), nodeId) TODO: Verificar IDsMultiGrapaddE
     }
 
     public void v_EdgeCreated() {
@@ -60,11 +63,11 @@ public class MultiGraphTest implements MultiGraphModel {
     }
 
     public void v_Node() {
-
+        assertEquals(this.nodeGraph, this.nodeHelper);
     }
 
     public void v_Edge() {
-
+        assertEquals(this.edgeGraph, this.edgeHelper);
     }
 
     public void e_Reset() {
@@ -82,7 +85,9 @@ public class MultiGraphTest implements MultiGraphModel {
     }
 
     public void v_EdgeNotExists() {
+        Exception ex = this.helper.getCapturedException();
 
+        assertThrows(ElementNotFoundException.class, () -> { throw ex; });
     }
 
     public void e_GetNode() {
@@ -164,12 +169,15 @@ public class MultiGraphTest implements MultiGraphModel {
     }
     @Override
     public void v_NodeAlreadyExists() {
+        Exception ex = this.helper.getCapturedException();
 
+        assertThrows(IdAlreadyInUseException.class, () -> { throw ex; });
     }
 
     @Override
     public void v_NodeRemoved() {
-
+        //Seria interessante bater os Ids em vez de bater os ponteiros
+        assertNotNull(this.helper.getLastRemovedNode());
     }
 
     @Override
@@ -182,7 +190,8 @@ public class MultiGraphTest implements MultiGraphModel {
 
     @Override
     public void v_EdgeRemoved() {
-
+        // FIX-ME?
+        assertNotNull(this.helper.getLastRemovedEdge());
     }
 
     @Override
@@ -195,8 +204,11 @@ public class MultiGraphTest implements MultiGraphModel {
 
     @Override
     public void v_EdgeAlreadyExists() {
+        Exception ex = this.helper.getCapturedException();
 
+        assertThrows(IdAlreadyInUseException.class, () -> { throw ex; });
     }
+
 
     @Test
     public void modelTest() {
