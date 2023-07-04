@@ -14,15 +14,17 @@ import java.util.stream.Stream;
 public class PathHelper {
     protected int autoIncrement;
 
-    Stack<Node> nodePath = new Stack<Node>();
-    Stack<Edge> edgePath = new Stack<Edge>();
+    protected Stack<Node> nodePath = new Stack<Node>();
+    protected Stack<Edge> edgePath = new Stack<Edge>();
 
 
-    Node lastPeekNode;
-    Edge lastPeekEdge;
+    protected Node lastPeekNode;
+    protected Edge lastPeekEdge;
 
-    Node lastPopNode;
-    Edge lastPopEdge;
+    protected Node lastPopNode;
+    protected Edge lastPopEdge;
+
+    protected Exception capturedException;
     public PathHelper() {
 
         this.autoIncrement = 0;
@@ -30,39 +32,64 @@ public class PathHelper {
 
     public String nextId() {
         return Integer.toString(this.autoIncrement++);
-    
-
-        private Graph createSimpleGraph() {
-		Graph graph = new DefaultGraph("test");
-		graph.setStrict(false);
-		graph.setAutoCreate(true);
-
-
-		return graph;
 	}
+
+    public Graph createSimpleGraph() {
+        Graph graph = new DefaultGraph("test");
+        graph.setStrict(false);
+        graph.setAutoCreate(true);
+
+
+        return graph;
+    }
+
+    public Edge getLastPeekEdge() {
+        return this.lastPeekEdge;
+    }
+
+    public Node getLastPeekNode() {
+        return this.lastPeekNode;
+    }
+
+    public Node getLastPopNode() {
+        return this.lastPopNode;
+    }
+
+    public Edge getLastPopEdge() {
+        return this.lastPopEdge;
+    }
+
+
     public void addEdge(Edge edge){
 
     }
     private Node getPathHead(){
+        return null;
     }
 
-    public void PeekEdge(){
+    public void PeekEdge() {
         this.lastPeekEdge = edgePath.peek();
     }
-    public void PeekNode(){
+    public void PeekNode() {
         this.lastPeekNode = nodePath.peek();
     }
-    public void PopEdge(){
+    public void PopEdge() {
         this.lastPopNode = this.nodePath.pop();
-        this.lastPopEdge this.edgePath.pop();
+        this.lastPopEdge =this.edgePath.pop();
 
         
     }
-    public void PopNode(){
+    public void PopNode() {
         this.lastPopNode = this.nodePath.pop();
-        this.lastPopEdge this.edgePath.pop();
+        this.lastPopEdge = this.edgePath.pop();
 
     }
 
+    public void setCapturedException(Exception ex) {
+        this.capturedException = ex;
+    }
+
+    public Exception getCapturedException() {
+        return this.capturedException;
     }
 }
