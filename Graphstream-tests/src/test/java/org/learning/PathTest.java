@@ -20,7 +20,9 @@ public class PathTest implements PathModel {
     protected Node lastPopNode;
     protected Edge lastPopEdge;
 
+    protected Graph g;
 
+<<<<<<< HEAD
     protected Node lastAddedNode;
     protected Node lastAddedEdge;
 
@@ -200,6 +202,93 @@ public class PathTest implements PathModel {
         {
             this.helper.setCapturedException(ex);
         }
+=======
+    public void v_Start() {
+        assertNull(this.g);
+    }
+
+    public void v_NullRoot(){
+        Exception ex = this.helper.getCapturedException();
+        assertThrows(IllegalArgumentException.class, () -> { throw ex; });
+    }
+
+    public void v_NotContainsEdge() {}
+    public void v_InvalidHead() {
+
+    }
+    public void v_EmptyStack(){
+        Exception ex = this.helper.getCapturedException();
+        assertThrows(EmptyStackException.class, () -> { throw ex; });
+    }
+
+    public void v_EmptyEdgePopException() {}
+    public void v_PopEdge() {
+        assertEquals(this.lastPopEdge, this.helper.getLastPopEdge());
+    }
+
+    public void v_EmptyNodePopException() {}
+
+    public void v_PopNode(){
+        assertEquals(this.lastPopNode, this.helper.getLastPopNode());
+    }
+
+    public void v_Path(){
+        //Transitório
+    }
+
+    public void e_CreatePath(){
+        this.p = new Path();
+        this.g = helper.createSimpleGraph();
+    }
+
+    @Override
+    public void e_PeekWhileEmptyEdge() {
+
+    }
+
+    @Override
+    public void v_EdgePeeked() {
+        assertEquals(this.lastPeekEdge, this.helper.getLastPeekEdge());
+    }
+
+    @Override
+    public void e_PeekWhileEmptyNode() {
+
+    }
+
+    @Override
+    public void v_NodePeeked() {
+        assertEquals(this.lastPeekNode, this.helper.getLastPeekNode());
+    }
+
+    public void e_Reset(){
+        //Estado de transição
+    }
+
+    public void e_NodeAddEdge() {
+        //Gera tupla de vértices aleatórios
+        Edge _edge = this.helper.generateRandomEdge();
+        //Adiciona a adge nova no helper
+        this.p.add(_edge);
+        this.helper.addEdge(_edge);
+    }
+
+    public void e_AddWithNullRoot() {
+
+    }
+
+    public void e_AddNotContainsEdge() {
+
+    }
+
+    @Override
+    public void v_Add() {
+
+    }
+
+    public void e_InvalidHead() {
+
+>>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
     }
     public void e_PeekEdge() {
         this.lastPeekEdge = p.peekEdge();
@@ -231,21 +320,39 @@ public class PathTest implements PathModel {
         this.helper.setCapturedException(null);
         try
         {
+<<<<<<< HEAD
             this.lastPopEdge = p.popEdge();
+=======
+            p.popEdge();
+>>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
         }
         catch (Exception ex)
         {
             this.helper.setCapturedException(ex);
         }
+<<<<<<< HEAD
 
     }
 
+=======
+
+    }
+
+>>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
     public void e_PopWhileEmptyNode() {
 
         this.helper.setCapturedException(null);
         try
         {
+<<<<<<< HEAD
             this.lastPeekNode = p.popNode();
+=======
+            p.popNode();
+        }
+        catch (Exception ex)
+        {
+            this.helper.setCapturedException(ex);
+>>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
         }
         catch (Exception ex)
         {
@@ -254,10 +361,17 @@ public class PathTest implements PathModel {
 
     }
 
+<<<<<<< HEAD
     @Override
     public void e_AddNodeEdge() {
 
         String e = helper.getNewEdge();
+=======
+    }
+
+    @Override
+    public void e_AddNodeEdge() {
+>>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
 
     }
 
@@ -320,16 +434,26 @@ public class PathTest implements PathModel {
         v_Path();
         e_PeekWhileEmptyNode();
         v_EmptyStack();
+<<<<<<< HEAD
+=======
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+>>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
         e_Reset();
         v_Path();
         e_AddNodeEdge();
         v_Add();
         e_Reset();
         v_Path();
+<<<<<<< HEAD
         e_AddNodeEdge();
         v_Add();
         e_Reset();
         v_Path();
+=======
+>>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
         e_PopEdge();
         v_PopEdge();
         e_Reset();
