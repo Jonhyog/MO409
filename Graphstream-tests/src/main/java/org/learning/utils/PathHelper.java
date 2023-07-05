@@ -24,10 +24,19 @@ public class PathHelper {
     protected Node lastPopNode;
     protected Edge lastPopEdge;
 
+    protected Node lastAddedNode;
+    protected Node lastAddedEdge;
+
+    protected Graph g;
+
+
+
+
     protected Exception capturedException;
     public PathHelper() {
 
         this.autoIncrement = 0;
+        this.g = createSimpleGraph();
     }
 
     public String nextId() {
@@ -60,8 +69,35 @@ public class PathHelper {
     }
 
 
-    public void addEdge(Edge edge){
+    public void addEdge(char a, char b){
 
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(a);
+        sb.append(b);
+        str = sb.toString();
+        g.addEdge(str, a, b);
+
+        Edge edge = g.getEdge(str);
+
+        //nodePath.push(edge.getOpposite(from));
+		edgePath.push(edge);
+        this.lastAddedEdge = edge;
+        
+        
+
+    }
+    public SimpleTuple getNewEdge(){
+        char a = char(autoIncrement);
+        char b = char(autoIncrement++);
+        SimpleTuple<char,char> t = new SimpleTuple<char,char>(a,b);
+        return t;
+        
+    }
+
+    public getLastAddedAdge(){
+
+        return this.lastAddedEdge;
     }
     private Node getPathHead(){
         return null;
@@ -92,4 +128,11 @@ public class PathHelper {
     public Exception getCapturedException() {
         return this.capturedException;
     }
+    public String getNewEdge(){
+
+
+    public Exception getCapturedException() {
+        return this.capturedException;
+    }
+}
 }

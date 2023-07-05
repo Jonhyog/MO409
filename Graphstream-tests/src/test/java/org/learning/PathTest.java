@@ -14,6 +14,8 @@ public class PathTest implements PathModel {
     protected PathHelper helper = new PathHelper();
     protected Path p;
 
+    protected Node lastAddedNode;
+    protected Node lastAddedEdge;
     protected Node lastPeekNode;
     protected Edge lastPeekEdge;
 
@@ -27,12 +29,22 @@ public class PathTest implements PathModel {
     }
 
     public void v_NullRoot(){
+
         Exception ex = this.helper.getCapturedException();
         assertThrows(IllegalArgumentException.class, () -> { throw ex; });
+
     }
 
-    public void v_NotContainsEdge() {}
+    public void v_NotContainsEdge() {
+
+        Exception ex = this.helper.getCapturedException();
+        assertThrows(IllegalArgumentException.class, () -> { throw ex; });
+
+    }
     public void v_InvalidHead() {
+
+        Exception ex = this.helper.getCapturedException();
+        assertThrows(IllegalArgumentException.class, () -> { throw ex; });
 
     }
     public void v_EmptyStack(){
@@ -40,12 +52,18 @@ public class PathTest implements PathModel {
         assertThrows(EmptyStackException.class, () -> { throw ex; });
     }
 
-    public void v_EmptyEdgePopException() {}
+    public void v_EmptyEdgePopException() {
+        Exception ex = this.helper.getCapturedException();
+        assertThrows(EmptyStackException.class, () -> { throw ex; });
+    }
     public void v_PopEdge() {
         assertEquals(this.lastPopEdge, this.helper.getLastPopEdge());
     }
 
-    public void v_EmptyNodePopException() {}
+    public void v_EmptyNodePopException() {
+        Exception ex = this.helper.getCapturedException();
+        assertThrows(EmptyStackException.class, () -> { throw ex; });
+    }
 
     public void v_PopNode(){
         assertEquals(this.lastPopNode, this.helper.getLastPopNode());
@@ -62,7 +80,15 @@ public class PathTest implements PathModel {
 
     @Override
     public void e_PeekWhileEmptyEdge() {
-
+            this.helper.setCapturedException(null);
+            try
+            { 
+                p.peekEdge();
+            }
+            catch (Exception ex)
+            {
+                this.helper.setCapturedException(ex);
+            }
     }
 
     @Override
@@ -72,7 +98,16 @@ public class PathTest implements PathModel {
 
     @Override
     public void e_PeekWhileEmptyNode() {
-
+            
+            this.helper.setCapturedException(null);
+            try
+            { 
+                p.peekNode();
+            }
+            catch (Exception ex)
+            {
+                this.helper.setCapturedException(ex);
+            }
     }
 
     @Override
@@ -84,29 +119,84 @@ public class PathTest implements PathModel {
         //Estado de transição
     }
 
-    public void e_NodeAddEdge() {
-        //Gera tupla de vértices aleatórios
-//        Edge _edge = this.helper.generateRandomEdge();
-        //Adiciona a adge nova no helper
-//        this.p.add(_edge);
-//        this.helper.addEdge(_edge);
+    public void e_AddNodeEdge() {
+        //Fé
+        SimpleTuple<char,char> t = helper.getNewEdge();
+
+        char a = t.x;
+        char b = t.y;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(a);
+        sb.append(b);
+        str = sb.toString();
+        g.addEdge(str, a, b);
+
+        Edge edge = g.getEdge(str);
+
+        p.add(edge);
+        this.lastAddedEdge = edge;
+
     }
 
     public void e_AddWithNullRoot() {
-
+        //Precisa que root != NULL
+        Node n = p.getRoot();
+        p.setRoot(null);
+        this.helper.setCapturedException(null);
+            try
+            { 
+                p.add(null);
+            }
+            catch (Exception ex)
+            {   p.setRoot(n);
+                this.helper.setCapturedException(ex);
+            }
     }
 
     public void e_AddNotContainsEdge() {
+        //Fé²
+
+        SimpleTuple<char,char> t = helper.getNewEdge();
+
+        char a = t.x;
+        char b = t.y;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(a);
+        sb.append(b);
+        str = sb.toString();
+        g.addEdge(str, a, b);
+
+        Edge edge = g.getEdge(str);
+
+        p.add(edge);
+        this.lastAddedEdge = edge;
 
     }
 
     @Override
     public void v_Add() {
-
+        assertEquals(p.peekEdge(), this.helper.getLastAddedAdge());
     }
 
     public void e_InvalidHead() {
+        Graph graph = createSimpleGraph();
+        //Não sei se isso funciona
+        graph.addEdge("ixiz", "ix", "iz");
+        //graph.addEdge("xz", "x", "z");
 
+        //XZ não faz parte de p;
+        this.helper.setCapturedException(null);
+        try
+        {   
+            path.add(graph.getEdge("xz"));
+
+        }
+        catch (Exception ex)
+        {
+            this.helper.setCapturedException(ex);
+        }
     }
     public void e_PeekEdge() {
         this.lastPeekEdge = p.peekEdge();
@@ -138,7 +228,7 @@ public class PathTest implements PathModel {
         this.helper.setCapturedException(null);
         try
         {
-            p.popEdge();
+            this.lastPopEdge = p.popEdge();
         }
         catch (Exception ex)
         {
@@ -152,7 +242,7 @@ public class PathTest implements PathModel {
         this.helper.setCapturedException(null);
         try
         {
-            p.popNode();
+            this.lastPeekNode = p.popNode();
         }
         catch (Exception ex)
         {
@@ -164,345 +254,12 @@ public class PathTest implements PathModel {
     @Override
     public void e_AddNodeEdge() {
 
+        String e = helper.getNewEdge();
+
     }
 
     @Test
     public void modelTest() {
-//        v_Start();
-//        e_CreatePath();
-//        v_Path();
-//        e_PopWhileEmptyNode();
-//        v_EmptyNodePopException();
-//        e_Reset();
-//        v_Path();
-//        e_AddWithNullRoot();
-//        v_NullRoot();
-//        e_Reset();
-//        v_Path();
-//        e_PeekWhileEmptyEdge();
-//        v_EmptyStack();
-//        e_Reset();
-//        v_Path();
-//        e_PopWhileEmptyNode();
-//        v_EmptyNodePopException();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_PeekEdge();
-//        v_EdgePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PopNode();
-//        v_PopNode();
-//        e_Reset();
-//        v_Path();
-//        e_PeekWhileEmptyNode();
-//        v_EmptyStack();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopNode();
-//        v_PopNode();
-//        e_Reset();
-//        v_Path();
-//        e_PeekEdge();
-//        v_EdgePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PeekEdge();
-//        v_EdgePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PopNode();
-//        v_PopNode();
-//        e_Reset();
-//        v_Path();
-//        e_PopNode();
-//        v_PopNode();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopNode();
-//        v_PopNode();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PeekEdge();
-//        v_EdgePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_PeekEdge();
-//        v_EdgePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopNode();
-//        v_PopNode();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopNode();
-//        v_PopNode();
-//        e_Reset();
-//        v_Path();
-//        e_AddNodeEdge();
-//        v_Add();
-//        e_Reset();
-//        v_Path();
-//        e_InvalidHead();
-//        v_InvalidHead();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_AddNotContainsEdge();
-//        v_NotContainsEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PopEdge();
-//        v_PopEdge();
-//        e_Reset();
-//        v_Path();
-//        e_PeekNode();
-//        v_NodePeeked();
-//        e_Reset();
-//        v_Path();
-//        e_PopWhileEmptyEdge();
-//        v_EmptyEdgePopException();
-//        e_Reset();
-//        v_Path();
-    }
 
+    }
 }
