@@ -24,7 +24,6 @@ public class PathHelper {
     protected Node lastPopNode;
     protected Edge lastPopEdge;
 
-<<<<<<< HEAD
     protected Node lastAddedNode;
     protected Node lastAddedEdge;
 
@@ -33,8 +32,6 @@ public class PathHelper {
 
 
 
-=======
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
     protected Exception capturedException;
     public PathHelper() {
 
@@ -50,36 +47,10 @@ public class PathHelper {
         Graph graph = new DefaultGraph("test");
         graph.setStrict(false);
         graph.setAutoCreate(true);
-<<<<<<< HEAD
 
 
         return graph;
     }
-=======
-
-
-        return graph;
-    }
-
-    public Edge getLastPeekEdge() {
-        return this.lastPeekEdge;
-    }
-
-    public Node getLastPeekNode() {
-        return this.lastPeekNode;
-    }
-
-    public Node getLastPopNode() {
-        return this.lastPopNode;
-    }
-
-    public Edge getLastPopEdge() {
-        return this.lastPopEdge;
-    }
-
-
-    public void addEdge(Edge edge){
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
 
     public Edge getLastPeekEdge() {
         return this.lastPeekEdge;
@@ -149,7 +120,6 @@ public class PathHelper {
         this.lastPopEdge = this.edgePath.pop();
 
     }
-<<<<<<< HEAD
 
     public void setCapturedException(Exception ex) {
         this.capturedException = ex;
@@ -157,11 +127,6 @@ public class PathHelper {
 
     public Exception getCapturedException() {
         return this.capturedException;
-=======
-
-    public void setCapturedException(Exception ex) {
-        this.capturedException = ex;
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
     }
     public String getNewEdge(){
 
@@ -169,4 +134,5 @@ public class PathHelper {
     public Exception getCapturedException() {
         return this.capturedException;
     }
+}
 }
