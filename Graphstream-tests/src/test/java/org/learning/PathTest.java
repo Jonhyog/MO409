@@ -22,187 +22,6 @@ public class PathTest implements PathModel {
 
     protected Graph g;
 
-<<<<<<< HEAD
-    protected Node lastAddedNode;
-    protected Node lastAddedEdge;
-
-    protected Graph g;
-
-    public void v_Start() {
-        assertNull(this.g);
-    }
-
-    public void v_NullRoot(){
-
-        Exception ex = this.helper.getCapturedException();
-        assertThrows(IllegalArgumentException.class, () -> { throw ex; });
-
-    }
-
-    public void v_NotContainsEdge() {
-
-        Exception ex = this.helper.getCapturedException();
-        assertThrows(IllegalArgumentException.class, () -> { throw ex; });
-
-    }
-    public void v_InvalidHead() {
-
-        Exception ex = this.helper.getCapturedException();
-        assertThrows(IllegalArgumentException.class, () -> { throw ex; });
-
-    }
-    public void v_EmptyStack(){
-        Exception ex = this.helper.getCapturedException();
-        assertThrows(EmptyStackException.class, () -> { throw ex; });
-    }
-
-    public void v_EmptyEdgePopException() {
-        Exception ex = this.helper.getCapturedException();
-        assertThrows(EmptyStackException.class, () -> { throw ex; });
-    }
-    public void v_PopEdge() {
-        assertEquals(this.lastPopEdge, this.helper.getLastPopEdge());
-    }
-
-    public void v_EmptyNodePopException() {
-        Exception ex = this.helper.getCapturedException();
-        assertThrows(EmptyStackException.class, () -> { throw ex; });
-    }
-
-    public void v_PopNode(){
-        assertEquals(this.lastPopNode, this.helper.getLastPopNode());
-    }
-
-    public void v_Path(){
-        //Transitório
-    }
-
-    public void e_CreatePath(){
-        this.p = new Path();
-        this.g = helper.createSimpleGraph();
-    }
-
-    @Override
-    public void e_PeekWhileEmptyEdge() {
-            this.helper.setCapturedException(null);
-            try
-            { 
-                p.peekEdge();
-            }
-            catch (Exception ex)
-            {
-                this.helper.setCapturedException(ex);
-            }
-    }
-
-    @Override
-    public void v_EdgePeeked() {
-        assertEquals(this.lastPeekEdge, this.helper.getLastPeekEdge());
-    }
-
-    @Override
-    public void e_PeekWhileEmptyNode() {
-            
-            this.helper.setCapturedException(null);
-            try
-            { 
-                p.peekNode();
-            }
-            catch (Exception ex)
-            {
-                this.helper.setCapturedException(ex);
-            }
-    }
-
-    @Override
-    public void v_NodePeeked() {
-        assertEquals(this.lastPeekNode, this.helper.getLastPeekNode());
-    }
-
-    public void e_Reset(){
-        //Estado de transição
-    }
-
-    public void e_AddNodeEdge() {
-        //Fé
-        SimpleTuple<char,char> t = helper.getNewEdge();
-
-        char a = t.x;
-        char b = t.y;
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(a);
-        sb.append(b);
-        str = sb.toString();
-        g.addEdge(str, a, b);
-
-        Edge edge = g.getEdge(str);
-
-        p.add(edge);
-        this.lastAddedEdge = edge;
-
-
-    }
-
-    public void e_AddWithNullRoot() {
-        //Precisa que root != NULL
-        Node n = p.getRoot();
-        p.setRoot(null);
-        this.helper.setCapturedException(null);
-            try
-            { 
-                p.add(null);
-            }
-            catch (Exception ex)
-            {   p.setRoot(n);
-                this.helper.setCapturedException(ex);
-            }
-    }
-
-    public void e_AddNotContainsEdge() {
-        //Fé²
-
-        SimpleTuple<char,char> t = helper.getNewEdge();
-
-        char a = t.x;
-        char b = t.y;
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(a);
-        sb.append(b);
-        str = sb.toString();
-        g.addEdge(str, a, b);
-
-        Edge edge = g.getEdge(str);
-
-        p.add(edge);
-        this.lastAddedEdge = edge;
-
-    }
-
-    @Override
-    public void v_Add() {
-        assertEquals(p.peekEdge() this.helper.getLastAddedAdge());
-    }
-
-    public void e_InvalidHead() {
-        Graph graph = createSimpleGraph();
-        //Não sei se isso funciona
-        graph.addEdge("ixiz", "ix", "iz");
-        //graph.addEdge("xz", "x", "z");
-
-        //XZ não faz parte de p;
-        this.helper.setCapturedException(null);
-        try
-        {   
-            path.add(graph.getEdge("xz"));
-
-        }
-        catch (Exception ex)
-        {
-            this.helper.setCapturedException(ex);
-        }
-=======
     public void v_Start() {
         assertNull(this.g);
     }
@@ -288,7 +107,6 @@ public class PathTest implements PathModel {
 
     public void e_InvalidHead() {
 
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
     }
     public void e_PeekEdge() {
         this.lastPeekEdge = p.peekEdge();
@@ -320,39 +138,25 @@ public class PathTest implements PathModel {
         this.helper.setCapturedException(null);
         try
         {
-<<<<<<< HEAD
-            this.lastPopEdge = p.popEdge();
-=======
             p.popEdge();
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
         }
         catch (Exception ex)
         {
             this.helper.setCapturedException(ex);
         }
-<<<<<<< HEAD
 
     }
 
-=======
-
-    }
-
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
     public void e_PopWhileEmptyNode() {
 
         this.helper.setCapturedException(null);
         try
         {
-<<<<<<< HEAD
-            this.lastPeekNode = p.popNode();
-=======
             p.popNode();
         }
         catch (Exception ex)
         {
             this.helper.setCapturedException(ex);
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
         }
         catch (Exception ex)
         {
@@ -361,17 +165,10 @@ public class PathTest implements PathModel {
 
     }
 
-<<<<<<< HEAD
-    @Override
-    public void e_AddNodeEdge() {
-
-        String e = helper.getNewEdge();
-=======
     }
 
     @Override
     public void e_AddNodeEdge() {
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
 
     }
 
@@ -434,26 +231,16 @@ public class PathTest implements PathModel {
         v_Path();
         e_PeekWhileEmptyNode();
         v_EmptyStack();
-<<<<<<< HEAD
-=======
-        e_Reset();
-        v_Path();
-        e_AddNodeEdge();
-        v_Add();
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
         e_Reset();
         v_Path();
         e_AddNodeEdge();
         v_Add();
         e_Reset();
         v_Path();
-<<<<<<< HEAD
         e_AddNodeEdge();
         v_Add();
         e_Reset();
         v_Path();
-=======
->>>>>>> 51b167808efa3a1d0b4a705290f0f6e3ad878470
         e_PopEdge();
         v_PopEdge();
         e_Reset();
