@@ -5,6 +5,8 @@ import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.graph.implementations.MultiNode;
+import org.graphstream.graph.implementations.SingleNode;
 import org.junit.jupiter.api.Test;
 import org.learning.models.MultiGraphModel;
 import org.learning.utils.GraphHelper;
@@ -59,6 +61,7 @@ public class MultiGraphTest implements MultiGraphModel {
 
     public void v_Node() {
         assertEquals(this.nodeGraph, this.nodeHelper);
+        assertTrue(this.nodeGraph instanceof MultiNode);
     }
 
     public void v_Edge() {

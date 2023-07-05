@@ -5,6 +5,7 @@ import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.graph.implementations.SingleNode;
 import org.junit.jupiter.api.Test;
 import org.learning.models.SingleGraphModel;
 import org.learning.utils.GraphHelper;
@@ -57,10 +58,12 @@ public class SingleGraphTest implements SingleGraphModel {
 
     public void v_Node() {
         assertEquals(this.nodeGraph, this.nodeHelper);
+        assertTrue(this.nodeGraph instanceof SingleNode);
     }
 
     public void v_Edge() {
         assertEquals(this.edgeGraph, this.edgeHelper);
+        assertTrue(this.nodeGraph instanceof SingleNode);
     }
 
     public void e_Reset() {
@@ -193,6 +196,7 @@ public class SingleGraphTest implements SingleGraphModel {
 
         assertThrows(IdAlreadyInUseException.class, () -> { throw ex; });
     }
+
 
     @Test
     public void modelTest() {
