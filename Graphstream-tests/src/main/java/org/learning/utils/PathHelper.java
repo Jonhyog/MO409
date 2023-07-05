@@ -25,11 +25,9 @@ public class PathHelper {
     protected Edge lastPopEdge;
 
     protected Node lastAddedNode;
-    protected Node lastAddedEdge;
+    protected Edge lastAddedEdge;
 
     protected Graph g;
-
-
 
 
     protected Exception capturedException;
@@ -69,36 +67,50 @@ public class PathHelper {
     }
 
 
-    public void addEdge(char a, char b){
+    public void addEdge(String a, String b){
 
 
         StringBuilder sb = new StringBuilder();
         sb.append(a);
         sb.append(b);
-        str = sb.toString();
+        String str = sb.toString();
         g.addEdge(str, a, b);
 
         Edge edge = g.getEdge(str);
-
+        Node from = g.getNode(a);
         //nodePath.push(edge.getOpposite(from));
-		edgePath.push(edge);
+        if (nodePath.size() == 0) {
+            this.nodePath.push(from);
+        }
+
+        this.nodePath.push(edge.getOpposite(from));
+		this.edgePath.push(edge);
         this.lastAddedEdge = edge;
-        
-        
+        this.lastAddedNode = edge.getOpposite(from);
 
+        System.out.println("Helper:" + edge);
     }
-    public SimpleTuple getNewEdge(){
-        char a = char(autoIncrement);
-        char b = char(autoIncrement++);
-        SimpleTuple<char,char> t = new SimpleTuple<char,char>(a,b);
+
+    public SimpleTuple<String, String> getNewEdge(){
+        String a;
+        if (nodePath.size() == 0) {
+            a = Integer.toString(autoIncrement);
+        }
+        else
+        {
+            a = nodePath.peek().toString();
+        }
+//        String a = Integer.toString(autoIncrement);
+        String b = Integer.toString(++autoIncrement);
+        SimpleTuple<String, String> t = new SimpleTuple<String, String>(a,b);
+
         return t;
-        
     }
 
-    public getLastAddedAdge(){
-
+    public Edge getLastAddedEdge() {
         return this.lastAddedEdge;
     }
+
     private Node getPathHead(){
         return null;
     }
@@ -109,9 +121,10 @@ public class PathHelper {
     public void PeekNode() {
         this.lastPeekNode = nodePath.peek();
     }
+
     public void PopEdge() {
         this.lastPopNode = this.nodePath.pop();
-        this.lastPopEdge =this.edgePath.pop();
+        this.lastPopEdge = this.edgePath.pop();
 
         
     }
@@ -121,6 +134,11 @@ public class PathHelper {
 
     }
 
+    public void clear() {
+        this.nodePath.clear();
+        this.edgePath.clear();
+    }
+
     public void setCapturedException(Exception ex) {
         this.capturedException = ex;
     }
@@ -128,11 +146,4 @@ public class PathHelper {
     public Exception getCapturedException() {
         return this.capturedException;
     }
-    public String getNewEdge(){
-
-
-    public Exception getCapturedException() {
-        return this.capturedException;
-    }
-}
 }

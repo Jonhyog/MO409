@@ -4,7 +4,9 @@ import org.graphstream.graph.*;
 import org.junit.jupiter.api.Test;
 import org.learning.models.PathModel;
 import org.learning.utils.PathHelper;
+import org.learning.utils.SimpleTuple;
 
+import javax.sound.midi.SysexMessage;
 import java.util.EmptyStackException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +17,7 @@ public class PathTest implements PathModel {
     protected Path p;
 
     protected Node lastAddedNode;
-    protected Node lastAddedEdge;
+    protected Edge lastAddedEdge;
     protected Node lastPeekNode;
     protected Edge lastPeekEdge;
 
@@ -57,7 +59,7 @@ public class PathTest implements PathModel {
         assertThrows(EmptyStackException.class, () -> { throw ex; });
     }
     public void v_PopEdge() {
-        assertEquals(this.lastPopEdge, this.helper.getLastPopEdge());
+        assertEquals(this.lastPopEdge.toString(), this.helper.getLastPopEdge().toString());
     }
 
     public void v_EmptyNodePopException() {
@@ -66,11 +68,11 @@ public class PathTest implements PathModel {
     }
 
     public void v_PopNode(){
-        assertEquals(this.lastPopNode, this.helper.getLastPopNode());
+        assertEquals(this.lastPopNode.toString(), this.helper.getLastPopNode().toString());
     }
 
     public void v_Path(){
-        //Transitório
+       assertNotNull(this.p);
     }
 
     public void e_CreatePath(){
@@ -93,7 +95,7 @@ public class PathTest implements PathModel {
 
     @Override
     public void v_EdgePeeked() {
-        assertEquals(this.lastPeekEdge, this.helper.getLastPeekEdge());
+        assertEquals(this.lastPeekEdge.toString(), this.helper.getLastPeekEdge().toString());
     }
 
     @Override
@@ -103,6 +105,7 @@ public class PathTest implements PathModel {
             try
             { 
                 p.peekNode();
+                System.out.println(p.size());
             }
             catch (Exception ex)
             {
@@ -112,7 +115,7 @@ public class PathTest implements PathModel {
 
     @Override
     public void v_NodePeeked() {
-        assertEquals(this.lastPeekNode, this.helper.getLastPeekNode());
+        assertEquals(this.lastPeekNode.toString(), this.helper.getLastPeekNode().toString());
     }
 
     public void e_Reset(){
@@ -121,67 +124,104 @@ public class PathTest implements PathModel {
 
     public void e_AddNodeEdge() {
         //Fé
-        SimpleTuple<char,char> t = helper.getNewEdge();
+        SimpleTuple<String, String> t = this.helper.getNewEdge();
+        System.out.println(t);
+        String a = t.x;
+        String b = t.y;
 
-        char a = t.x;
-        char b = t.y;
+        this.helper.addEdge(a, b);
 
         StringBuilder sb = new StringBuilder();
         sb.append(a);
         sb.append(b);
-        str = sb.toString();
+        String str = sb.toString();
+//        System.out.println(str);
         g.addEdge(str, a, b);
+
+        Node from = g.getNode(a);
+//        System.out.println(System.identityHashCode(from));
 
         Edge edge = g.getEdge(str);
 
-        p.add(edge);
-        this.lastAddedEdge = edge;
+//        System.out.println(edge);
 
+        p.add(from, edge);
+        System.out.println("Test:" + edge);
+
+        this.lastAddedEdge = edge;
     }
 
     public void e_AddWithNullRoot() {
         //Precisa que root != NULL
-        Node n = p.getRoot();
-        p.setRoot(null);
+        p.clear();
+        this.helper.clear();
+//        Node n = p.getRoot();
+//        p.setRoot(null);
         this.helper.setCapturedException(null);
             try
             { 
                 p.add(null);
             }
             catch (Exception ex)
-            {   p.setRoot(n);
+            {
                 this.helper.setCapturedException(ex);
             }
     }
 
     public void e_AddNotContainsEdge() {
         //Fé²
+        try
+        {
+            SimpleTuple<String, String> t = helper.getNewEdge();
+            SimpleTuple<String, String> z = helper.getNewEdge();
 
-        SimpleTuple<char,char> t = helper.getNewEdge();
+            String a = t.x;
+            String b = t.y;
 
-        char a = t.x;
-        char b = t.y;
+            String c = z.x + "magic";
+            String d = z.y + "magic";
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(a);
-        sb.append(b);
-        str = sb.toString();
-        g.addEdge(str, a, b);
+            StringBuilder sb1 = new StringBuilder();
+            sb1.append(a);
+            sb1.append(b);
+            String str1 = sb1.toString();
 
-        Edge edge = g.getEdge(str);
+            StringBuilder sb2 = new StringBuilder();
+            sb2.append(c);
+            sb2.append(d);
+            String str2 = sb2.toString();
 
-        p.add(edge);
-        this.lastAddedEdge = edge;
+            g.addEdge(str1, a, b);
+            g.addEdge(str2, c, d);
+
+            Node from = g.getNode(a);
+            Edge edge = g.getEdge(str2);
+
+            System.out.println(a);
+            System.out.println(b);
+            System.out.println(c);
+            System.out.println(d);
+            System.out.println(edge.getSourceNode());
+            System.out.println(edge.getTargetNode());
+            p.add(from, edge);
+            this.lastAddedEdge = edge;
+            System.out.println("Exception:" + edge);
+        }
+        catch (Exception ex)
+        {
+          this.helper.setCapturedException(ex);
+        }
 
     }
 
     @Override
     public void v_Add() {
-        assertEquals(p.peekEdge(), this.helper.getLastAddedAdge());
+        assertEquals(p.peekEdge(), this.lastAddedEdge);
     }
 
     public void e_InvalidHead() {
-        Graph graph = createSimpleGraph();
+        Graph graph = this.helper.createSimpleGraph();
+
         //Não sei se isso funciona
         graph.addEdge("ixiz", "ix", "iz");
         //graph.addEdge("xz", "x", "z");
@@ -190,7 +230,7 @@ public class PathTest implements PathModel {
         this.helper.setCapturedException(null);
         try
         {   
-            path.add(graph.getEdge("xz"));
+            this.p.add(graph.getEdge("ixiz"));
 
         }
         catch (Exception ex)
@@ -205,23 +245,17 @@ public class PathTest implements PathModel {
 
     public void e_PeekNode() {
         this.lastPeekNode = p.peekNode();
-        helper.PeekNode();
+        this.helper.PeekNode();
     }
 
     public void e_PopEdge() {
-
-
         this.lastPopEdge = p.popEdge();
         helper.PopEdge();
-
-
     }
 
     public void e_PopNode() {
-
         this.lastPopNode = p.popNode();
         helper.PopNode();
-
     }
 
     public void e_PopWhileEmptyEdge() {
@@ -251,15 +285,256 @@ public class PathTest implements PathModel {
 
     }
 
-    @Override
-    public void e_AddNodeEdge() {
-
-        String e = helper.getNewEdge();
-
-    }
-
     @Test
     public void modelTest() {
-
+        v_Start();
+        e_CreatePath();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_InvalidHead();
+        v_InvalidHead();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_PopNode();
+        v_PopNode();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_InvalidHead();
+        v_InvalidHead();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_InvalidHead();
+        v_InvalidHead();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_InvalidHead();
+        v_InvalidHead();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_PeekEdge();
+        v_EdgePeeked();
+        e_Reset();
+        v_Path();
+        e_AddNotContainsEdge();
+        v_NotContainsEdge();
+        e_Reset();
+        v_Path();
+        e_InvalidHead();
+        v_InvalidHead();
+        e_Reset();
+        v_Path();
+        e_PopEdge();
+        v_PopEdge();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_InvalidHead();
+        v_InvalidHead();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_PeekEdge();
+        v_EdgePeeked();
+        e_Reset();
+        v_Path();
+        e_PeekEdge();
+        v_EdgePeeked();
+        e_Reset();
+        v_Path();
+        e_AddNotContainsEdge();
+        v_NotContainsEdge();
+        e_Reset();
+        v_Path();
+        e_PeekEdge();
+        v_EdgePeeked();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_PeekEdge();
+        v_EdgePeeked();
+        e_Reset();
+        v_Path();
+        e_AddNotContainsEdge();
+        v_NotContainsEdge();
+        e_Reset();
+        v_Path();
+        e_PopNode();
+        v_PopNode();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_PopEdge();
+        v_PopEdge();
+        e_Reset();
+        v_Path();
+        e_PopEdge();
+        v_PopEdge();
+        e_Reset();
+        v_Path();
+        e_AddNotContainsEdge();
+        v_NotContainsEdge();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_PeekEdge();
+        v_EdgePeeked();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_AddNotContainsEdge();
+        v_NotContainsEdge();
+        e_Reset();
+        v_Path();
+        e_InvalidHead();
+        v_InvalidHead();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_PeekEdge();
+        v_EdgePeeked();
+        e_Reset();
+        v_Path();
+        e_PopNode();
+        v_PopNode();
+        e_Reset();
+        v_Path();
+        e_PopEdge();
+        v_PopEdge();
+        e_Reset();
+        v_Path();
+        e_PopNode();
+        v_PopNode();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_InvalidHead();
+        v_InvalidHead();
+        e_Reset();
+        v_Path();
+        e_InvalidHead();
+        v_InvalidHead();
+        e_Reset();
+        v_Path();
+        e_PeekEdge();
+        v_EdgePeeked();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_PeekNode();
+        v_NodePeeked();
+        e_Reset();
+        v_Path();
+        e_PeekEdge();
+        v_EdgePeeked();
+        e_Reset();
+        v_Path();
+        e_PopNode();
+        v_PopNode();
+        e_Reset();
+        v_Path();
+        e_PopEdge();
+        v_PopEdge();
+        e_Reset();
+        v_Path();
+        e_AddNodeEdge();
+        v_Add();
+        e_Reset();
+        v_Path();
+        e_PopNode();
+        v_PopNode();
+        e_Reset();
+        v_Path();
+        e_PopNode();
+        v_PopNode();
+        e_Reset();
+        v_Path();
+        e_PeekWhileEmptyNode();
+        v_EmptyStack();
+        e_Reset();
+        v_Path();
+        e_AddWithNullRoot();
+        v_NullRoot();
+        e_Reset();
+        v_Path();
+        e_PopWhileEmptyNode();
+        v_EmptyNodePopException();
+        e_Reset();
+        v_Path();
+        e_PopWhileEmptyEdge();
+        v_EmptyEdgePopException();
+        e_Reset();
+        v_Path();
+        e_PeekWhileEmptyEdge();
+        v_EmptyStack();
     }
 }
