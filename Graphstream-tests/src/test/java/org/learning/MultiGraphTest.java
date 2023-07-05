@@ -10,10 +10,6 @@ import org.learning.models.MultiGraphModel;
 import org.learning.utils.GraphHelper;
 import org.learning.utils.SimpleTuple;
 
-import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.ExecutionException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MultiGraphTest implements MultiGraphModel {
@@ -53,13 +49,12 @@ public class MultiGraphTest implements MultiGraphModel {
     }
 
     public void e_AddEdge() {
-    //Gera tupla de vértices aleatórios
-    SimpleTuple<Node, Node> tuple = this.helper.generateRandomEdge();
-    //Gera um id novo incrementado do último
-    String edgeID = this.helper.nextId();
-    //Adiciona a adge nova no helper
-    this.helper.addEdge(this.g.addEdge(edgeID, tuple.x, tuple.y, false));
-
+        //Gera tupla de vértices aleatórios
+        SimpleTuple<Node, Node> tuple = this.helper.generateRandomEdge(true);
+        //Gera um id novo incrementado do último
+        String edgeID = this.helper.nextId();
+        //Adiciona a adge nova no helper
+        this.helper.addEdge(this.g.addEdge(edgeID, tuple.x, tuple.y, false));
     }
 
     public void v_Node() {
@@ -101,6 +96,7 @@ public class MultiGraphTest implements MultiGraphModel {
         assertNull(this.g);
     }
 
+
     public void e_GetEdge() {
         //Esse aqui eu confiei
 
@@ -109,7 +105,6 @@ public class MultiGraphTest implements MultiGraphModel {
         this.edgeGraph = this.g.getEdge(helper.getEdgeId(this.edgeHelper));
     }
 
-    @Override
     public void e_RemoveNonexistentNode() {
         this.helper.setCapturedException(null);
         try
@@ -124,7 +119,6 @@ public class MultiGraphTest implements MultiGraphModel {
         }
     }
 
-    @Override
     public void e_AddExistentNode() {
         //Pega um nó que já existe
         Node n = this.helper.getRandomNode();
@@ -140,6 +134,13 @@ public class MultiGraphTest implements MultiGraphModel {
     }
 
     @Override
+    public void e_RemoveExistentEdge() {
+        //Escolhe uma edge aleatória e remove
+        Edge e = this.helper.getRandomEdge();
+
+        this.helper.removeEdge(this.g.removeEdge(e));
+    }
+
     public void e_AddExistentEdge() {
         Edge e = this.helper.getRandomEdge();
         this.helper.setCapturedException(null);
@@ -155,7 +156,6 @@ public class MultiGraphTest implements MultiGraphModel {
         }
     }
 
-    @Override
     public void e_RemoveNonexistentEdge() {
         this.helper.setCapturedException(null);
         try
@@ -167,46 +167,29 @@ public class MultiGraphTest implements MultiGraphModel {
             this.helper.setCapturedException(ex);
         }
     }
-    @Override
-    public void v_NodeAlreadyExists() {
-        Exception ex = this.helper.getCapturedException();
-
-        assertThrows(IdAlreadyInUseException.class, () -> { throw ex; });
-    }
 
     @Override
-    public void v_NodeRemoved() {
-        //Seria interessante bater os Ids em vez de bater os ponteiros
-        assertNotNull(this.helper.getLastRemovedNode());
-    }
-
-    @Override
-    public void e_RemoveExistingNode() {
+    public void e_RemoveExistentNode() {
         //Escolhe um nó salvo no helper e remove
         Node n = this.helper.getRandomNode();
 
         this.helper.removeNode(this.g.removeNode(n));
     }
 
-    @Override
-    public void v_EdgeRemoved() {
-        // FIX-ME?
-        assertNotNull(this.helper.getLastRemovedEdge());
-    }
-
-    @Override
-    public void e_RemoveExistingEdge() {
-        //Escolhe uma edge aleatória e remove
-        Edge e = this.helper.getRandomEdge();
-
-        this.helper.removeEdge(this.g.removeEdge(e));
-    }
-
-    @Override
-    public void v_EdgeAlreadyExists() {
+    public void v_NodeAlreadyExists() {
         Exception ex = this.helper.getCapturedException();
 
         assertThrows(IdAlreadyInUseException.class, () -> { throw ex; });
+    }
+
+    public void v_NodeRemoved() {
+        //Seria interessante bater os Ids em vez de bater os ponteiros
+        assertNotNull(this.helper.getLastRemovedNode());
+    }
+
+    public void v_EdgeRemoved() {
+        // FIX-ME?
+        assertNotNull(this.helper.getLastRemovedEdge());
     }
 
 
@@ -215,156 +198,273 @@ public class MultiGraphTest implements MultiGraphModel {
         v_Start();
         e_CreateGraph();
         v_MultiGraph();
-        e_AddEdge();
-        v_EdgeCreated();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
         e_Reset();
         v_MultiGraph();
         e_AddNode();
         v_NodeCreated();
         e_Reset();
         v_MultiGraph();
-        e_AddEdge();
-        v_EdgeCreated();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
         e_Reset();
         v_MultiGraph();
         e_GetNode();
         v_Node();
         e_Reset();
         v_MultiGraph();
-        e_RemoveNode();
-        v_NodeExists();
+        e_RemoveExistentNode();
+        v_NodeRemoved();
         e_Reset();
         v_MultiGraph();
-        e_RemoveEdge();
-        v_EdgeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_GetEdge();
-        v_Edge();
-        e_Reset();
-        v_MultiGraph();
-        e_AddEdge();
-        v_EdgeCreated();
-        e_Reset();
-        v_MultiGraph();
-        e_GetEdge();
-        v_Edge();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_AddNode();
-        v_NodeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_AddEdge();
-        v_EdgeCreated();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeNotExist();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeNotExist();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeNotExist();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeNotExist();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeNotExist();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeNotExist();
-        e_Reset();
-        v_MultiGraph();
-        e_AddNode();
-        v_NodeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_GetNode();
-        v_Node();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveEdge();
-        v_EdgeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeNotExist();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_AddNode();
-        v_NodeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_GetEdge();
-        v_Edge();
-        e_Reset();
-        v_MultiGraph();
-        e_AddNode();
-        v_NodeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeExists();
-        e_Reset();
-        v_MultiGraph();
-        e_AddEdge();
-        v_EdgeCreated();
-        e_Reset();
-        v_MultiGraph();
-        e_AddEdge();
-        v_EdgeCreated();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
-        v_NodeNotExist();
-        e_Reset();
-        v_MultiGraph();
-        e_AddNode();
-        v_NodeCreated();
-        e_Reset();
-        v_MultiGraph();
-        e_AddEdge();
-        v_EdgeCreated();
-        e_Reset();
-        v_MultiGraph();
-        e_GetNode();
-        v_Node();
-        e_Reset();
-        v_MultiGraph();
-        e_GetEdge();
-        v_Edge();
-        e_Reset();
-        v_MultiGraph();
-        e_RemoveNode();
+        e_RemoveNonexistentEdge();
         v_EdgeNotExists();
         e_Reset();
         v_MultiGraph();
-
-
-
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_AddNode();
+        v_NodeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_AddExistentNode();
+        v_NodeAlreadyExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveExistentNode();
+        v_NodeRemoved();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_AddNode();
+        v_NodeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_AddExistentNode();
+        v_NodeAlreadyExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveExistentNode();
+        v_NodeRemoved();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_AddNode();
+        v_NodeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_GetNode();
+        v_Node();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveExistentNode();
+        v_NodeRemoved();
+        e_Reset();
+        v_MultiGraph();
+        e_AddNode();
+        v_NodeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_GetNode();
+        v_Node();
+        e_Reset();
+        v_MultiGraph();
+        e_GetNode();
+        v_Node();
+        e_Reset();
+        v_MultiGraph();
+        e_AddNode();
+        v_NodeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_GetNode();
+        v_Node();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_AddNode();
+        v_NodeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_AddExistentNode();
+        v_NodeAlreadyExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_GetNode();
+        v_Node();
+        e_Reset();
+        v_MultiGraph();
+        e_AddExistentNode();
+        v_NodeAlreadyExists();
+        e_Reset();
+        v_MultiGraph();
+        e_AddNode();
+        v_NodeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_AddEdge();
+        v_EdgeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_AddEdge();
+        v_EdgeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_GetNode();
+        v_Node();
+        e_Reset();
+        v_MultiGraph();
+        e_AddNode();
+        v_NodeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_GetEdge();
+        v_Edge();
+        e_Reset();
+        v_MultiGraph();
+        e_GetEdge();
+        v_Edge();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentNode();
+        v_NodeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveNonexistentEdge();
+        v_EdgeNotExists();
+        e_Reset();
+        v_MultiGraph();
+        e_AddEdge();
+        v_EdgeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_AddEdge();
+        v_EdgeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_GetEdge();
+        v_Edge();
+        e_Reset();
+        v_MultiGraph();
+        e_AddEdge();
+        v_EdgeCreated();
+        e_Reset();
+        v_MultiGraph();
+        e_RemoveExistentEdge();
+        v_EdgeRemoved();
+        e_Reset();
+        v_MultiGraph();
     }
 }

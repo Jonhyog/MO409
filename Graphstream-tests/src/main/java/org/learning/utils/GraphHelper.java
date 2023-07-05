@@ -124,17 +124,25 @@ public class GraphHelper {
         return null;
     }
 
-    public SimpleTuple<Node, Node> generateRandomEdge() {
+    public SimpleTuple<Node, Node> generateRandomEdge(boolean repeat) {
         Node vertex1 = this.getRandomNode();
         Node vertex2 = this.getRandomNode();
 
         Stream<Node> neighbours = vertex1.neighborNodes();
+
+        if (repeat) {
+            return new SimpleTuple<>(vertex1, vertex2);
+        }
 
         if (neighbours.anyMatch(n -> { return n == vertex2; })) {
             return this.generateRandomEdge();
         }
 
         return new SimpleTuple<>(vertex1, vertex2);
+    }
+
+    public SimpleTuple<Node, Node> generateRandomEdge() {
+        return this.generateRandomEdge(false);
     }
 
     public void setCapturedException(Exception ex) {
