@@ -1,3 +1,9 @@
+package org.learning.utils;
+
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.AdjacencyListGraph;
+
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,19 +23,25 @@ public class NodeStub {
         this.outputEdges = new ArrayList<>();
     }
 
-    public void addEdge(Node A, Node B, boolean directed, NodeStub B) {
-        addEdge(A.toString() + B.toString(), A, B, directed, B);
+    public void addEdge(Node A, Node B, boolean directed, NodeStub _B) {
+        addEdge(A.toString() + B.toString(), A, B, directed, _B);
     }
 
-    public void addEdge(String id, Node A, Node B, boolean directed, NodeStub B) {
-        this.g.addEdge(id, A, B, directed);
-        this.addOutEdge(B);
-        B.addInEdge(A);
+    public void addEdge(String id, Node A, Node B, boolean directed, NodeStub _B) {
+        Edge edge = this.g.addEdge(id, A, B, directed);
+
+        this.addOutEdge(edge);
+        _B.addInEdge(edge);
+
+        if (!directed) {
+            this.addInEdge(edge);
+            _B.addOutEdge(edge);
+        }
     }
 
-    public boolean isSameEdge(Edge edge) {
-        boolean in = compareStreamToList(edge.leavingEdges(), this.outputEdges);
-        boolean out = compareStreamToList(edge.enteringEdges(), this.inputEdges);
+    public boolean isSameEdge(Node node) {
+        boolean in = compareStreamToList(node.leavingEdges(), this.outputEdges);
+        boolean out = compareStreamToList(node.enteringEdges(), this.inputEdges);
         return in && out;
     }
 

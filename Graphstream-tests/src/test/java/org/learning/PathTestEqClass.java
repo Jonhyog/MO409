@@ -1,6 +1,7 @@
 package org.learning;
 
 import org.graphstream.graph.*;
+import org.graphstream.graph.implementations.DefaultGraph;
 import org.junit.jupiter.api.Test;
 import org.learning.models.PathModel;
 import org.learning.utils.PathHelper;
@@ -17,7 +18,7 @@ public class PathTestEqClass {
 
 
     @Test
-    private void TC_1(){
+    public void TC_1(){
 		
         Graph graph = new DefaultGraph("test");
 		graph.setStrict(false);
@@ -36,16 +37,14 @@ public class PathTestEqClass {
         path.add(graph.getEdge("cd"));
         path.add(graph.getEdge("da"));
 
-
-        if(!path.pop().equals(D)){throw new Exception("Erro");}
-        if(!path.pop().equals(C)){throw new Exception("Erro");}
-        if(!path.pop().equals(B)){throw new Exception("Erro");}
-        if(!path.pop().equals(A)){throw new Exception("Erro");}
-
+        assertTrue(path.popEdge().equals(D));
+        assertTrue(path.popEdge().equals(C));
+        assertTrue(path.popEdge().equals(B));
+        assertTrue(path.popEdge().equals(A));
     }
 
     @Test
-    private void TC_2(){
+    public void TC_2(){
 
         Graph graph = new DefaultGraph("test");
 		graph.setStrict(false);
@@ -63,21 +62,16 @@ public class PathTestEqClass {
         path.add(graph.getEdge("cd"));
         path.add(graph.getEdge("de"));
 
-        if(!path.pop().equals(D)){throw new Exception("Erro");}
-        if(!path.pop().equals(C)){throw new Exception("Erro");}
-        if(!path.pop().equals(B)){throw new Exception("Erro");}
-        if(!path.pop().equals(A)){throw new Exception("Erro");}
-
-    
-        
-
+        assertTrue(path.popEdge().equals(D));
+        assertTrue(path.popEdge().equals(C));
+        assertTrue(path.popEdge().equals(B));
+        assertTrue(path.popEdge().equals(A));
     }
 
     @Test
-    private void TC_3(){
-        " ¯\_(ツ)_/¯"
-        Path p;
+    public void TC_3(){
+        // ¯\_(ツ)_/¯
+        Path p = null;
         assertNull(p);
-
     }
 }
