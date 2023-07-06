@@ -4,10 +4,10 @@ import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleNode;
 import org.junit.jupiter.api.Test;
-import org.learning.models.SingleGraphModel;
+import org.learning.models.MultiGraphModel;
 import org.learning.utils.GraphHelper;
 import org.learning.utils.SimpleTuple;
 
@@ -17,28 +17,34 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SingleGraphTest implements SingleGraphModel {
+public class MultiGraphTest implements MultiGraphModel {
     
    
     
     @Test
     private void TC_1(){
 
-        SingleGraph g = new SingleGraph();
+        MultiGraph g = new MultiGraph();
 
         Node A = g.addNode("A");
         Node B = g.addNode("B");
         Node C = g.addNode("C");
         Node D = g.addNode("D");
 
-        NodeStub _A = new NodeStub(A,g);
-        NodeStub _B = new NodeStub(B,g);
-        NodeStub _C = new NodeStub(C,g);
-        NodeStub _D = new NodeStub(D,g);
+        NodeStub _A = new NodeStub(A);
+        NodeStub _B = new NodeStub(B);
+        NodeStub _C = new NodeStub(C);
+        NodeStub _D = new NodeStub(D);
 
+        //Se der errado não identifica o erro :/
+        Edge AB = g.addEdge("AB",A,B,true);
+        Edge BC = g.addEdge("BC",B,C,true)
 
-        _A.addEdge(A,B,true,_B);
-        _B.addEdge(B,C,true,_C);
+        _A.addOutEdge(AB);
+        _B.addInEdge(AB);
+
+        _B.addOutEdge(BC);
+        _C.addInEdge(BC);
 
         //EM VEZ DE RETORNAR, GERAR ERRO
         if(!_A.isSameEdge(A))
@@ -47,7 +53,7 @@ public class SingleGraphTest implements SingleGraphModel {
             throw new Exception("Erro B");
         if(!_C.isSameEdge(C))
             throw new Exception("Erro C");
-        if(!_C.isSameEdge(C))
+        if(!_D.isSameEdge(D))
             throw new Exception("Erro D");
         
 
@@ -57,21 +63,21 @@ public class SingleGraphTest implements SingleGraphModel {
     @Test
     private void TC_2(){
 
-        SingleGraph g = new SingleGraph();
+        MultiGraph g = new MultiGraph();
 
         Node A = g.addNode("A");
         Node B = g.addNode("B");
         Node C = g.addNode("C");
 
+        NodeStub _A = new NodeStub(A);
+        NodeStub _B = new NodeStub(B);
+        NodeStub _C = new NodeStub(C);
 
-        NodeStub _A = new NodeStub(A,g);
-        NodeStub _B = new NodeStub(B,g);
-        NodeStub _C = new NodeStub(C,g);
+        _A.addOutEdge(g.addEdge("AB",A,B,false));
+        _B.addOutEdge(g.addEdge("BC",B,C,false));
+        _C.addOutEdge(g.addEdge("CA",C,A,false));
 
 
-        _A.addEdge(A,B,false,_B);
-        _B.addEdge(B,C,false,_C);
-        _C.addEdge(C,A,false,_A);
 
         //EM VEZ DE RETORNAR, GERAR ERRO
         if(!_A.isSameEdge(A))
@@ -81,14 +87,12 @@ public class SingleGraphTest implements SingleGraphModel {
         if(!_C.isSameEdge(C))
             throw new Exception("Erro C");
 
-        
-
     }
 
     @Test
     private void TC_3(){
         " ¯\_(ツ)_/¯"
-        SingleGraph g;
+        MultiGraph g;
         assertNull(g);
     }
 

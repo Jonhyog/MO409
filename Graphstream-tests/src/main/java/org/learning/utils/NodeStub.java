@@ -1,67 +1,59 @@
-import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NodeStub {
     private String id;
-    private List<Edge> inputEdges;
-    private List<Edge> outputEdges;
+    private Node node;
+    private ArrayList<String> inputEdges;
+    private ArrayList<String> outputEdges;
+    private AdjacencyListGraph g;
 
-    public NodeStub(Node node){
-        NodeStub(node.toString());
-    }
-    public NodeStub(String id) {
-
-        NodeStub(id,new List<Node>(),new List<Node>());
-    }
-    public NodeStub(String id, List<Node> inputEdges, List<Node> outputEdges) {
-        this.id = id;
-        this.inputEdges = inputEdges;
-        this.outputEdges = outputEdges;
+    public NodeStub(Node n, AdjacencyListGraph g) {
+        this.g = g;
+        this.id = n.toString();
+        this.node = n;
+        this.inputEdges = new ArrayList<>();
+        this.outputEdges = new ArrayList<>();
     }
 
-    public String getId() {
-        return id;
+    public void addEdge(Node A, Node B, boolean directed, NodeStub B) {
+        addEdge(A.toString() + B.toString(), A, B, directed, B);
     }
 
-    public List<Node> getinputEdges() {
-        return inputEdges;
+    public void addEdge(String id, Node A, Node B, boolean directed, NodeStub B) {
+        this.g.addEdge(id, A, B, directed);
+        this.addOutEdge(B);
+        B.addInEdge(A);
     }
 
-    public List<Node> getoutputEdges() {
-        return outputEdges;
+    public boolean isSameEdge(Edge edge) {
+        boolean in = compareStreamToList(edge.leavingEdges(), this.outputEdges);
+        boolean out = compareStreamToList(edge.enteringEdges(), this.inputEdges);
+        return in && out;
     }
 
-    public void addInEdge(Edge edge){
+    public boolean compareStreamToList(Stream<Edge> adj, ArrayList<String> own) {
+        ArrayList<String> adjList = adj.map(Edge::toString).collect(Collectors.toCollection(ArrayList::new));
 
-        inputEdges.push(edge);
-
-    }
-    public void addOutEdge(Edge edge){
-
-        outputEdges.push(edge);
-    }
-    public boolean isSameEdge(Edge edge){
-
-       boolean in = compareStreamToList(edge.leavingEdges() , this.outputEdges);
-       boolean out = compareStreamToList(edge.enteringEdges() , this.inputEdges);
-
-       return in && out;
-    }
-
-    public boolean compareStreamToList(Stream<Edge> adj, List<Edge> own) {
-        List<Edge> adjList = adj.collect(Collectors.toList());
-        
-        // Verificar se os tamanhos das listas são diferentes
         if (adjList.size() != own.size()) {
             return false;
         }
-        
-        // Verificar se os elementos são os mesmos
-        for (Edge edge : own) {
+
+        for (String edge : own) {
             if (!adjList.contains(edge)) {
                 return false;
             }
         }
-        
+
         return true;
+    }
+
+    public void addInEdge(Edge edge) {
+        inputEdges.add(edge.toString());
+    }
+
+    public void addOutEdge(Edge edge) {
+        outputEdges.add(edge.toString());
     }
 }
