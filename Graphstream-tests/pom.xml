@@ -133,9 +133,17 @@
             <param>org.graphstream.graph.implementations.SingleGraph</param>
             <param>org.graphstream.graph.implementations.MultiGraph</param>
             <param>org.graphstream.graph.implementations.AdjacencyListGraph</param>
+            <param>org.graphstream.graph.Path</param>
           </targetClasses>
           <targetTests>
-            <param>org.learning.*</param>
+            <param>org.learning.MultiGraphEqClassTest</param>
+            <param>org.learning.MultiGraphTest</param>
+            <param>org.learning.PathTestEqClass</param>
+            <param>org.learning.SingleGraphEqClassTest</param>
+            <param>org.learning.SingleGraphTest</param>
+            <param>org.learning.SingleGraphLimitValueTest</param>
+            <param>org.learning.MultiGraphLimitValueTest</param>
+            <param>org.learning.PathLimitValueTest</param>
           </targetTests>
         </configuration>
         <executions>

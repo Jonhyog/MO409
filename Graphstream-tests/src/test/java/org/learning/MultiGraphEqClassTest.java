@@ -42,6 +42,9 @@ public class MultiGraphEqClassTest{
         assertTrue(_A.isSameEdge(A));
         assertTrue(_B.isSameEdge(B));
         assertTrue(_C.isSameEdge(C));
+
+        assertEquals(3, g.getNodeCount());
+        assertEquals(2, g.getEdgeCount());
     }
 
     @Test
@@ -77,6 +80,9 @@ public class MultiGraphEqClassTest{
         assertTrue(_A.isSameEdge(A));
         assertTrue(_B.isSameEdge(B));
         assertTrue(_C.isSameEdge(C));
+
+        assertEquals(3, g.getNodeCount());
+        assertEquals(7, g.getEdgeCount());
     }
 
     @Test
