@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MultiGraphTest implements MultiGraphModel {
+public class MultiGraphEqClassTest{
     
    
     
@@ -29,22 +29,14 @@ public class MultiGraphTest implements MultiGraphModel {
         Node A = g.addNode("A");
         Node B = g.addNode("B");
         Node C = g.addNode("C");
-        Node D = g.addNode("D");
 
-        NodeStub _A = new NodeStub(A);
-        NodeStub _B = new NodeStub(B);
-        NodeStub _C = new NodeStub(C);
-        NodeStub _D = new NodeStub(D);
+        NodeStub _A = new NodeStub(A,g);
+        NodeStub _B = new NodeStub(B,g);
+        NodeStub _C = new NodeStub(C,g);
 
-        //Se der errado não identifica o erro :/
-        Edge AB = g.addEdge("AB",A,B,true);
-        Edge BC = g.addEdge("BC",B,C,true)
-
-        _A.addOutEdge(AB);
-        _B.addInEdge(AB);
-
-        _B.addOutEdge(BC);
-        _C.addInEdge(BC);
+        //A-B-C
+        _A.addEdge(A,B,true,_B);
+        _B.addEdge(B,C,true,_C);
 
         //EM VEZ DE RETORNAR, GERAR ERRO
         if(!_A.isSameEdge(A))
@@ -53,10 +45,7 @@ public class MultiGraphTest implements MultiGraphModel {
             throw new Exception("Erro B");
         if(!_C.isSameEdge(C))
             throw new Exception("Erro C");
-        if(!_D.isSameEdge(D))
-            throw new Exception("Erro D");
-        
-
+    
 
     }
 
@@ -69,15 +58,26 @@ public class MultiGraphTest implements MultiGraphModel {
         Node B = g.addNode("B");
         Node C = g.addNode("C");
 
-        NodeStub _A = new NodeStub(A);
-        NodeStub _B = new NodeStub(B);
-        NodeStub _C = new NodeStub(C);
 
-        _A.addOutEdge(g.addEdge("AB",A,B,false));
-        _B.addOutEdge(g.addEdge("BC",B,C,false));
-        _C.addOutEdge(g.addEdge("CA",C,A,false));
+        NodeStub _A = new NodeStub(A,g);
+        NodeStub _B = new NodeStub(B,g);
+        NodeStub _C = new NodeStub(C,g);
 
 
+        /*   < -
+            B< - > A <-> C
+            ^------------^  
+         */
+        _A.addEdge(A,B,false,_B);
+        _A.addEdge("AB1",A,B,false,_B);
+        _A.addEdge(A,C,false,_C);
+        
+
+        _B.addEdge(B,A,false,_A);
+        _B.addEdge(B,C,false,_C);
+
+        _C.addEdge(C,A,false,_A);
+        _C.addEdge(C,B,false,_B);
 
         //EM VEZ DE RETORNAR, GERAR ERRO
         if(!_A.isSameEdge(A))
@@ -86,6 +86,8 @@ public class MultiGraphTest implements MultiGraphModel {
             throw new Exception("Erro B");
         if(!_C.isSameEdge(C))
             throw new Exception("Erro C");
+
+        
 
     }
 

@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SingleGraphTest implements SingleGraphModel {
+public class SingleGraphEqClassTest {
     
    
     
