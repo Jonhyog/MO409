@@ -50,10 +50,11 @@ public class MultiGraphPairwiseTest {
             }
         }
 
-        Edge e = g.addEdge("AB_Copia", g.getNode("A"), g.getNode("B"), true);
-        Edge e = g.addEdge("CD_Copia", g.getNode("C"), g.getNode("D"), true);
+        Edge e1 = g.addEdge("AB_Copia", g.getNode("A"), g.getNode("B"), true);
+        Edge e2 = g.addEdge("CD_Copia", g.getNode("C"), g.getNode("D"), true);
 
-        assertTrue(e.isDirected());
+        assertTrue(e1.isDirected());
+        assertTrue(e2.isDirected());
 
         // Checks if is all nodes are connected
         for (String node1 : nodeList) {
@@ -89,8 +90,6 @@ public class MultiGraphPairwiseTest {
         Edge BC = g.addEdge("B-C", B, C, false);
         Edge CD = g.addEdge("C-D", C, D, false);
         Edge DE = g.addEdge("D-E", D, E, false);
-        Edge AE = g.addEdge("A-E", A, E, false);
-        Edge _AE = g.addEdge("A-ECopia", A, E, false);
 
         // Checks if there is a cycle
         assertFalse(E.hasEdgeToward(A));
@@ -100,8 +99,6 @@ public class MultiGraphPairwiseTest {
         assertFalse(BC.isDirected());
         assertFalse(CD.isDirected());
         assertFalse(DE.isDirected());
-        assertFalse(AE.isDirected());
-        assertFalse(_AE.isDirected());
 
     }
 

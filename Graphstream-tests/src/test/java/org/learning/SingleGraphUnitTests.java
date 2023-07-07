@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SingleGraphUnitTests {
     protected static SingleGraph g;
@@ -46,16 +45,26 @@ public class SingleGraphUnitTests {
 
     @Test
     public void testNodeStream() {
-        Stream<Node> nodeStream = g.nodes();
+        Stream<Node> nodeStream;
 
+        nodeStream = g.nodes();
+        assertNotNull(nodeStream);
+        assertTrue(nodeStream.findAny().isPresent());
+
+        nodeStream = g.nodes();
         assertNotNull(nodeStream);
         nodeStream.forEach(Assertions::assertNotNull);
     }
 
     @Test
     public void testEdgeStream() {
-        Stream<Edge> edgeStream = g.edges();
+        Stream<Edge> edgeStream;
 
+        edgeStream = g.edges();
+        assertNotNull(edgeStream);
+        assertTrue(edgeStream.findAny().isPresent());
+
+        edgeStream = g.edges();
         assertNotNull(edgeStream);
         edgeStream.forEach(Assertions::assertNotNull);
     }
@@ -70,6 +79,14 @@ public class SingleGraphUnitTests {
             assertNotNull(n);
             assertEquals(nodeID, n.toString());
         }
+
+        for (int i = 0; i < nodeList.length; i++) {
+            Node n = g.getNode(nodeList[i]);
+
+            assertNotNull(n);
+            assertEquals(nodeList[i], n.toString());
+        }
+
     }
 
     @Test
@@ -81,6 +98,13 @@ public class SingleGraphUnitTests {
 
             assertNotNull(e);
             assertEquals(edgeID, e.toString().split("\\[")[0]);
+        }
+
+        for (int i = 0; i < edgeList.length; i++) {
+            Edge e = g.getEdge(edgeList[i]);
+
+            assertNotNull(e);
+            assertEquals(edgeList[i], e.toString().split("\\[")[0]);
         }
 
     }
