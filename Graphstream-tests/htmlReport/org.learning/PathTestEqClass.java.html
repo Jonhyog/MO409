@@ -3,16 +3,10 @@
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.DefaultGraph;
 import org.junit.jupiter.api.Test;
-import org.learning.models.PathModel;
-import org.learning.utils.PathHelper;
-import org.learning.utils.SimpleTuple;
-
-import javax.sound.midi.SysexMessage;
-import java.util.EmptyStackException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-<span class="fc" id="L15">public class PathTestEqClass {</span>
+<span class="fc" id="L9">public class PathTestEqClass {</span>
 
     //Seria legal colocar uns laços/funções, mas por enquanto vai assim
 
@@ -20,59 +14,59 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     public void TC_1(){
 		
-<span class="fc" id="L23">        Graph graph = new DefaultGraph(&quot;test&quot;);</span>
-<span class="fc" id="L24">		graph.setStrict(false);</span>
-<span class="fc" id="L25">		graph.setAutoCreate(true);</span>
+<span class="fc" id="L17">        Graph graph = new DefaultGraph(&quot;test&quot;);</span>
+<span class="fc" id="L18">		graph.setStrict(false);</span>
+<span class="fc" id="L19">		graph.setAutoCreate(true);</span>
 
 
-<span class="fc" id="L28">		Edge A = graph.addEdge(&quot;ab&quot;, &quot;a&quot;, &quot;b&quot;);</span>
-<span class="fc" id="L29">		Edge B = graph.addEdge(&quot;bc&quot;, &quot;b&quot;, &quot;c&quot;);</span>
-<span class="fc" id="L30">		Edge C = graph.addEdge(&quot;cd&quot;, &quot;c&quot;, &quot;d&quot;);</span>
-<span class="fc" id="L31">        Edge D = graph.addEdge(&quot;da&quot;, &quot;d&quot;, &quot;a&quot;);</span>
+<span class="fc" id="L22">		Edge A = graph.addEdge(&quot;ab&quot;, &quot;a&quot;, &quot;b&quot;);</span>
+<span class="fc" id="L23">		Edge B = graph.addEdge(&quot;bc&quot;, &quot;b&quot;, &quot;c&quot;);</span>
+<span class="fc" id="L24">		Edge C = graph.addEdge(&quot;cd&quot;, &quot;c&quot;, &quot;d&quot;);</span>
+<span class="fc" id="L25">        Edge D = graph.addEdge(&quot;da&quot;, &quot;d&quot;, &quot;a&quot;);</span>
 
-<span class="fc" id="L33">        Path path = new Path();</span>
-<span class="fc" id="L34">        path.setRoot(graph.getNode(&quot;a&quot;));</span>
-<span class="fc" id="L35">        path.add(graph.getEdge(&quot;ab&quot;));</span>
-<span class="fc" id="L36">        path.add(graph.getEdge(&quot;bc&quot;));</span>
-<span class="fc" id="L37">        path.add(graph.getEdge(&quot;cd&quot;));</span>
-<span class="fc" id="L38">        path.add(graph.getEdge(&quot;da&quot;));</span>
+<span class="fc" id="L27">        Path path = new Path();</span>
+<span class="fc" id="L28">        path.setRoot(graph.getNode(&quot;a&quot;));</span>
+<span class="fc" id="L29">        path.add(graph.getEdge(&quot;ab&quot;));</span>
+<span class="fc" id="L30">        path.add(graph.getEdge(&quot;bc&quot;));</span>
+<span class="fc" id="L31">        path.add(graph.getEdge(&quot;cd&quot;));</span>
+<span class="fc" id="L32">        path.add(graph.getEdge(&quot;da&quot;));</span>
 
-<span class="fc" id="L40">        assertTrue(path.popEdge().equals(D));</span>
-<span class="fc" id="L41">        assertTrue(path.popEdge().equals(C));</span>
-<span class="fc" id="L42">        assertTrue(path.popEdge().equals(B));</span>
-<span class="fc" id="L43">        assertTrue(path.popEdge().equals(A));</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L34">        assertTrue(path.popEdge().equals(D));</span>
+<span class="fc" id="L35">        assertTrue(path.popEdge().equals(C));</span>
+<span class="fc" id="L36">        assertTrue(path.popEdge().equals(B));</span>
+<span class="fc" id="L37">        assertTrue(path.popEdge().equals(A));</span>
+<span class="fc" id="L38">    }</span>
 
     @Test
     public void TC_2(){
 
-<span class="fc" id="L49">        Graph graph = new DefaultGraph(&quot;test&quot;);</span>
-<span class="fc" id="L50">		graph.setStrict(false);</span>
-<span class="fc" id="L51">		graph.setAutoCreate(true);</span>
+<span class="fc" id="L43">        Graph graph = new DefaultGraph(&quot;test&quot;);</span>
+<span class="fc" id="L44">		graph.setStrict(false);</span>
+<span class="fc" id="L45">		graph.setAutoCreate(true);</span>
 
-<span class="fc" id="L53">		Edge A = graph.addEdge(&quot;ab&quot;, &quot;a&quot;, &quot;b&quot;);</span>
-<span class="fc" id="L54">		Edge B =graph.addEdge(&quot;bc&quot;, &quot;b&quot;, &quot;c&quot;);</span>
-<span class="fc" id="L55">		Edge C =graph.addEdge(&quot;cd&quot;, &quot;c&quot;, &quot;d&quot;);</span>
-<span class="fc" id="L56">        Edge D =graph.addEdge(&quot;de&quot;, &quot;d&quot;, &quot;e&quot;);</span>
+<span class="fc" id="L47">		Edge A = graph.addEdge(&quot;ab&quot;, &quot;a&quot;, &quot;b&quot;);</span>
+<span class="fc" id="L48">		Edge B =graph.addEdge(&quot;bc&quot;, &quot;b&quot;, &quot;c&quot;);</span>
+<span class="fc" id="L49">		Edge C =graph.addEdge(&quot;cd&quot;, &quot;c&quot;, &quot;d&quot;);</span>
+<span class="fc" id="L50">        Edge D =graph.addEdge(&quot;de&quot;, &quot;d&quot;, &quot;e&quot;);</span>
 
-<span class="fc" id="L58">        Path path = new Path();</span>
-<span class="fc" id="L59">        path.setRoot(graph.getNode(&quot;a&quot;));</span>
-<span class="fc" id="L60">        path.add(graph.getEdge(&quot;ab&quot;));</span>
-<span class="fc" id="L61">        path.add(graph.getEdge(&quot;bc&quot;));</span>
-<span class="fc" id="L62">        path.add(graph.getEdge(&quot;cd&quot;));</span>
-<span class="fc" id="L63">        path.add(graph.getEdge(&quot;de&quot;));</span>
+<span class="fc" id="L52">        Path path = new Path();</span>
+<span class="fc" id="L53">        path.setRoot(graph.getNode(&quot;a&quot;));</span>
+<span class="fc" id="L54">        path.add(graph.getEdge(&quot;ab&quot;));</span>
+<span class="fc" id="L55">        path.add(graph.getEdge(&quot;bc&quot;));</span>
+<span class="fc" id="L56">        path.add(graph.getEdge(&quot;cd&quot;));</span>
+<span class="fc" id="L57">        path.add(graph.getEdge(&quot;de&quot;));</span>
 
-<span class="fc" id="L65">        assertTrue(path.popEdge().equals(D));</span>
-<span class="fc" id="L66">        assertTrue(path.popEdge().equals(C));</span>
-<span class="fc" id="L67">        assertTrue(path.popEdge().equals(B));</span>
-<span class="fc" id="L68">        assertTrue(path.popEdge().equals(A));</span>
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L59">        assertTrue(path.popEdge().equals(D));</span>
+<span class="fc" id="L60">        assertTrue(path.popEdge().equals(C));</span>
+<span class="fc" id="L61">        assertTrue(path.popEdge().equals(B));</span>
+<span class="fc" id="L62">        assertTrue(path.popEdge().equals(A));</span>
+<span class="fc" id="L63">    }</span>
 
     @Test
     public void TC_3(){
         // ¯\_(ツ)_/¯
-<span class="fc" id="L74">        Path p = null;</span>
-<span class="fc" id="L75">        assertNull(p);</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L68">        Path p = null;</span>
+<span class="fc" id="L69">        assertNull(p);</span>
+<span class="fc" id="L70">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

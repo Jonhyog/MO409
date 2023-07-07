@@ -151,10 +151,10 @@ import static org.junit.jupiter.api.Assertions.*;
 <span class="fc" id="L151">        g.addEdge(&quot;BC&quot;,&quot;B&quot;,&quot;C&quot;,false);</span>
 <span class="fc" id="L152">        g.addEdge(&quot;CD&quot;,&quot;C&quot;,&quot;D&quot;,false);</span>
 
-//        assertThrows(IndexOutOfBoundsException.class, () -&gt; {
-//            g.getNode(4);
-//        });
-<span class="fc" id="L157">    }</span>
+<span class="nc" id="L154">        assertThrows(IndexOutOfBoundsException.class, () -&gt; {</span>
+<span class="fc" id="L155">            g.getNode(4);</span>
+<span class="fc" id="L156">        });</span>
+<span class="nc" id="L157">    }</span>
 
     @Test
     public void getEdgeNegative(){

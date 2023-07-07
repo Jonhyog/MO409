@@ -60,8 +60,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         }
 
 <span class="pc" id="L62">        assertThrows(IndexOutOfBoundsException.class, () -&gt; { g.getNode(-1); });</span>
-<span class="pc" id="L63">        assertThrows(IndexOutOfBoundsException.class, () -&gt; { g.getNode(nodeQuantity + 1); });</span>
-<span class="fc" id="L64">    }</span>
+<span class="pc" id="L63">        assertThrows(IndexOutOfBoundsException.class, () -&gt; { g.getNode(nodeQuantity); });</span>
+<span class="nc" id="L64">    }</span>
 
     @Test
     public void edgeGettersLimitValue() {
