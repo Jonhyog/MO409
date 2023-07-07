@@ -60,7 +60,7 @@ public class MultiGraphLimitValueTest {
         }
 
         assertThrows(IndexOutOfBoundsException.class, () -> { g.getNode(-1); });
-        assertThrows(IndexOutOfBoundsException.class, () -> { g.getNode(nodeQuantity + 1); });
+        assertThrows(IndexOutOfBoundsException.class, () -> { g.getNode(nodeQuantity); });
     }
 
     @Test

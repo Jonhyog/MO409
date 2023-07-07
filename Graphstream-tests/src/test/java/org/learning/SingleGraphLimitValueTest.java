@@ -3,6 +3,8 @@ package org.learning;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,9 +23,9 @@ public class SingleGraphLimitValueTest {
         assertNotNull(g.addNode("129"));
     }
 
-    @Test
-    public void edgeLimitCapacity() {
-        int nodeNumber = 47;
+    @ParameterizedTest
+    @ValueSource(ints = {47, 48}) // ( 47 * 46 ) / 2 == 1081 > DEFAULT_EDGE_CAPACITY
+    public void edgeLimitCapacity(int nodeNumber) {
         SingleGraph g = new SingleGraph("NodeLimit");
         Node a, b;
 
@@ -31,6 +33,7 @@ public class SingleGraphLimitValueTest {
             g.addNode(Integer.toString(i));
         }
 
+        // Creates full graph
         for (int i = 0; i < nodeNumber; i++) {
             for (int j = i + 1; j < nodeNumber; j++) {
                 a = g.getNode(Integer.toString(i));
@@ -40,12 +43,13 @@ public class SingleGraphLimitValueTest {
             }
         }
 
-        assertNotNull(g.addEdge("l" , g.getNode("0"), g.getNode("47"), false));
+        // Adds one more edge
+        assertNotNull(g.addEdge("l" , g.getNode("0"), g.getNode(Integer.toString(nodeNumber)), false));
     }
 
-    @Test
-    public void nodeGettersLimitValue() {
-        int nodeQuantity = 10;
+    @ParameterizedTest
+    @ValueSource(ints = {10, 11, 42, 51, 128})
+    public void nodeGettersLimitValue(int nodeQuantity) {
         SingleGraph g = new SingleGraph("NodeLimit");
 
         for (int i = 0; i < nodeQuantity; i++) {
@@ -57,12 +61,12 @@ public class SingleGraphLimitValueTest {
         }
 
         assertThrows(IndexOutOfBoundsException.class, () -> { g.getNode(-1); });
-        assertThrows(IndexOutOfBoundsException.class, () -> { g.getNode(nodeQuantity + 1); });
+        assertThrows(IndexOutOfBoundsException.class, () -> { g.getNode(nodeQuantity); });
     }
 
-    @Test
-    public void edgeGettersLimitValue() {
-        int nodeQuantity = 10;
+    @ParameterizedTest
+    @ValueSource(ints = {10, 11, 42, 51, 128})
+    public void edgeGettersLimitValue(int nodeQuantity) {
         int edgeQuantity = (nodeQuantity * (nodeQuantity - 1)) / 2;
         SingleGraph g = new SingleGraph("EdgeLimit");
         Node a, b;
