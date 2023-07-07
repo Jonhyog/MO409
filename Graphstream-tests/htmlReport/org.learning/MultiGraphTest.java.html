@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MultiGraphTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning</a> &gt; <span class="el_source">MultiGraphTest.java</span></div><h1>MultiGraphTest.java</h1><pre class="source lang-java linenums">package org.learning;
+
+import org.graphstream.graph.ElementNotFoundException;
+import org.graphstream.graph.IdAlreadyInUseException;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.graph.implementations.MultiNode;
+import org.graphstream.graph.implementations.SingleNode;
+import org.junit.jupiter.api.Test;
+import org.learning.models.MultiGraphModel;
+import org.learning.utils.GraphHelper;
+import org.learning.utils.SimpleTuple;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L17">public class MultiGraphTest implements MultiGraphModel {</span>
+    //Utilitários
+    MultiGraph g;
+    GraphHelper helper;
+    Node nodeHelper, nodeGraph;
+    Edge edgeHelper, edgeGraph;
+
+
+    public void e_AddNode() {
+<span class="fc" id="L26">        String nodeID = helper.nextId();</span>
+<span class="fc" id="L27">        Node newNode = this.g.addNode(nodeID);</span>
+<span class="fc" id="L28">        helper.addNode(newNode);</span>
+<span class="fc" id="L29">    }</span>
+
+    public void v_NodeNotExists() {
+        //Verifica se há uma exceção e se ela foi gerada pelo erro
+<span class="fc" id="L33">        Exception ex = this.helper.getCapturedException();</span>
+
+<span class="fc" id="L35">        assertThrows(ElementNotFoundException.class, () -&gt; { throw ex; });</span>
+<span class="fc" id="L36">    }</span>
+
+    public void v_NodeCreated() {
+<span class="fc" id="L39">        Node vertex = this.helper.getLastNode();</span>
+
+<span class="fc" id="L41">        assertNotNull(vertex);</span>
+        // assertEquals(vertex.toString(), nodeId) TODO: Verificar IDsMultiGrapaddE
+<span class="fc" id="L43">    }</span>
+
+    public void v_EdgeCreated() {
+
+        //Verifica se a última aresta criada foi , de fato, a inserida
+<span class="fc" id="L48">        Edge edge = this.helper.getLastEdge();</span>
+<span class="fc" id="L49">        assertNotNull(edge);</span>
+
+<span class="fc" id="L51">    }</span>
+
+    public void e_AddEdge() {
+        //Gera tupla de vértices aleatórios
+<span class="fc" id="L55">        SimpleTuple&lt;Node, Node&gt; tuple = this.helper.generateRandomEdge(true);</span>
+        //Gera um id novo incrementado do último
+<span class="fc" id="L57">        String edgeID = this.helper.nextId();</span>
+        //Adiciona a adge nova no helper
+<span class="fc" id="L59">        this.helper.addEdge(this.g.addEdge(edgeID, tuple.x, tuple.y, false));</span>
+<span class="fc" id="L60">    }</span>
+
+    public void v_Node() {
+<span class="fc" id="L63">        assertEquals(this.nodeGraph, this.nodeHelper);</span>
+<span class="fc" id="L64">        assertTrue(this.nodeGraph instanceof MultiNode);</span>
+<span class="fc" id="L65">    }</span>
+
+    public void v_Edge() {
+<span class="fc" id="L68">        assertEquals(this.edgeGraph, this.edgeHelper);</span>
+<span class="fc" id="L69">    }</span>
+
+    public void e_Reset() {
+        //Não faz nada :(
+<span class="fc" id="L73">    }</span>
+
+    public void e_CreateGraph() {
+<span class="fc" id="L76">        this.g = new MultiGraph(&quot;Test-Graph&quot;);</span>
+<span class="fc" id="L77">        this.helper = new GraphHelper();</span>
+<span class="fc" id="L78">    }</span>
+
+    public void v_MultiGraph() {
+        //O grafo deve existir
+<span class="fc" id="L82">        assertNotNull(this.g);</span>
+<span class="fc" id="L83">    }</span>
+
+    public void v_EdgeNotExists() {
+<span class="fc" id="L86">        Exception ex = this.helper.getCapturedException();</span>
+
+<span class="fc" id="L88">        assertThrows(ElementNotFoundException.class, () -&gt; { throw ex; });</span>
+<span class="fc" id="L89">    }</span>
+
+    public void e_GetNode() {
+        //Pega um nó aleatóriamente
+        //OBS:Pegar o último nó visitado é uma opção boa tbm
+<span class="fc" id="L94">        this.nodeHelper = this.helper.getRandomNode();</span>
+<span class="fc" id="L95">        this.nodeGraph = this.g.getNode(nodeHelper.toString());</span>
+<span class="fc" id="L96">    }</span>
+
+    public void v_Start() {
+<span class="fc" id="L99">        assertNull(this.g);</span>
+<span class="fc" id="L100">    }</span>
+
+
+    public void e_GetEdge() {
+        //Esse aqui eu confiei
+
+<span class="fc" id="L106">        this.edgeHelper = this.helper.getRandomEdge();</span>
+        // Edge.toSting return &lt;edge-id&gt;[node1--node2] so string must be parsed
+<span class="fc" id="L108">        this.edgeGraph = this.g.getEdge(helper.getEdgeId(this.edgeHelper));</span>
+<span class="fc" id="L109">    }</span>
+
+    public void e_RemoveNonexistentNode() {
+<span class="fc" id="L112">        this.helper.setCapturedException(null);</span>
+        try
+        {   
+            //Remove um nó que não existe pois nextId não existe
+            //Deve gerar erro
+<span class="nc" id="L117">            this.g.removeNode(this.helper.nextId());</span>
+        }
+<span class="fc" id="L119">        catch (Exception ex)</span>
+        {   //Salva a exceção capturada
+<span class="fc" id="L121">            this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L122">        }</span>
+<span class="fc" id="L123">    }</span>
+
+    public void e_AddExistentNode() {
+        //Pega um nó que já existe
+<span class="fc" id="L127">        Node n = this.helper.getRandomNode();</span>
+<span class="fc" id="L128">        this.helper.setCapturedException(null);</span>
+        try
+        {   //Tenta adicionar
+<span class="nc" id="L131">            this.g.addNode(n.toString());</span>
+        }
+<span class="fc" id="L133">        catch (Exception ex)</span>
+        {   
+<span class="fc" id="L135">            this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L136">        }</span>
+<span class="fc" id="L137">    }</span>
+
+    @Override
+    public void e_RemoveExistentEdge() {
+        //Escolhe uma edge aleatória e remove
+<span class="fc" id="L142">        Edge e = this.helper.getRandomEdge();</span>
+
+<span class="fc" id="L144">        this.helper.removeEdge(this.g.removeEdge(e));</span>
+<span class="fc" id="L145">    }</span>
+
+    public void e_AddExistentEdge() {
+<span class="nc" id="L148">        Edge e = this.helper.getRandomEdge();</span>
+<span class="nc" id="L149">        this.helper.setCapturedException(null);</span>
+
+        try
+        {
+<span class="nc" id="L153">            String edgeID = helper.getEdgeId(e);</span>
+<span class="nc" id="L154">            this.g.addEdge(edgeID, e.getNode0(), e.getNode1());</span>
+        }
+<span class="nc" id="L156">        catch (Exception ex)</span>
+        {
+<span class="nc" id="L158">            this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L159">        }</span>
+<span class="nc" id="L160">    }</span>
+
+    public void e_RemoveNonexistentEdge() {
+<span class="fc" id="L163">        this.helper.setCapturedException(null);</span>
+        try
+        {
+<span class="nc" id="L166">            this.g.removeEdge(this.helper.nextId());</span>
+        }
+<span class="fc" id="L168">        catch (Exception ex)</span>
+        {
+<span class="fc" id="L170">            this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L171">        }</span>
+<span class="fc" id="L172">    }</span>
+
+    @Override
+    public void e_RemoveExistentNode() {
+        //Escolhe um nó salvo no helper e remove
+<span class="fc" id="L177">        Node n = this.helper.getRandomNode();</span>
+
+<span class="fc" id="L179">        this.helper.removeNode(this.g.removeNode(n));</span>
+<span class="fc" id="L180">    }</span>
+
+    public void v_NodeAlreadyExists() {
+<span class="fc" id="L183">        Exception ex = this.helper.getCapturedException();</span>
+
+<span class="fc" id="L185">        assertThrows(IdAlreadyInUseException.class, () -&gt; { throw ex; });</span>
+<span class="fc" id="L186">    }</span>
+
+    public void v_NodeRemoved() {
+        //Seria interessante bater os Ids em vez de bater os ponteiros
+<span class="fc" id="L190">        assertNotNull(this.helper.getLastRemovedNode());</span>
+<span class="fc" id="L191">    }</span>
+
+    public void v_EdgeRemoved() {
+        // FIX-ME?
+<span class="fc" id="L195">        assertNotNull(this.helper.getLastRemovedEdge());</span>
+<span class="fc" id="L196">    }</span>
+
+
+    @Test
+    public void modelTest() {
+<span class="fc" id="L201">        v_Start();</span>
+<span class="fc" id="L202">        e_CreateGraph();</span>
+<span class="fc" id="L203">        v_MultiGraph();</span>
+<span class="fc" id="L204">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L205">        v_NodeNotExists();</span>
+<span class="fc" id="L206">        e_Reset();</span>
+<span class="fc" id="L207">        v_MultiGraph();</span>
+<span class="fc" id="L208">        e_AddNode();</span>
+<span class="fc" id="L209">        v_NodeCreated();</span>
+<span class="fc" id="L210">        e_Reset();</span>
+<span class="fc" id="L211">        v_MultiGraph();</span>
+<span class="fc" id="L212">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L213">        v_NodeNotExists();</span>
+<span class="fc" id="L214">        e_Reset();</span>
+<span class="fc" id="L215">        v_MultiGraph();</span>
+<span class="fc" id="L216">        e_GetNode();</span>
+<span class="fc" id="L217">        v_Node();</span>
+<span class="fc" id="L218">        e_Reset();</span>
+<span class="fc" id="L219">        v_MultiGraph();</span>
+<span class="fc" id="L220">        e_RemoveExistentNode();</span>
+<span class="fc" id="L221">        v_NodeRemoved();</span>
+<span class="fc" id="L222">        e_Reset();</span>
+<span class="fc" id="L223">        v_MultiGraph();</span>
+<span class="fc" id="L224">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L225">        v_EdgeNotExists();</span>
+<span class="fc" id="L226">        e_Reset();</span>
+<span class="fc" id="L227">        v_MultiGraph();</span>
+<span class="fc" id="L228">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L229">        v_NodeNotExists();</span>
+<span class="fc" id="L230">        e_Reset();</span>
+<span class="fc" id="L231">        v_MultiGraph();</span>
+<span class="fc" id="L232">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L233">        v_EdgeNotExists();</span>
+<span class="fc" id="L234">        e_Reset();</span>
+<span class="fc" id="L235">        v_MultiGraph();</span>
+<span class="fc" id="L236">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L237">        v_EdgeNotExists();</span>
+<span class="fc" id="L238">        e_Reset();</span>
+<span class="fc" id="L239">        v_MultiGraph();</span>
+<span class="fc" id="L240">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L241">        v_EdgeNotExists();</span>
+<span class="fc" id="L242">        e_Reset();</span>
+<span class="fc" id="L243">        v_MultiGraph();</span>
+<span class="fc" id="L244">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L245">        v_EdgeNotExists();</span>
+<span class="fc" id="L246">        e_Reset();</span>
+<span class="fc" id="L247">        v_MultiGraph();</span>
+<span class="fc" id="L248">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L249">        v_NodeNotExists();</span>
+<span class="fc" id="L250">        e_Reset();</span>
+<span class="fc" id="L251">        v_MultiGraph();</span>
+<span class="fc" id="L252">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L253">        v_EdgeNotExists();</span>
+<span class="fc" id="L254">        e_Reset();</span>
+<span class="fc" id="L255">        v_MultiGraph();</span>
+<span class="fc" id="L256">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L257">        v_NodeNotExists();</span>
+<span class="fc" id="L258">        e_Reset();</span>
+<span class="fc" id="L259">        v_MultiGraph();</span>
+<span class="fc" id="L260">        e_AddNode();</span>
+<span class="fc" id="L261">        v_NodeCreated();</span>
+<span class="fc" id="L262">        e_Reset();</span>
+<span class="fc" id="L263">        v_MultiGraph();</span>
+<span class="fc" id="L264">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L265">        v_NodeNotExists();</span>
+<span class="fc" id="L266">        e_Reset();</span>
+<span class="fc" id="L267">        v_MultiGraph();</span>
+<span class="fc" id="L268">        e_AddExistentNode();</span>
+<span class="fc" id="L269">        v_NodeAlreadyExists();</span>
+<span class="fc" id="L270">        e_Reset();</span>
+<span class="fc" id="L271">        v_MultiGraph();</span>
+<span class="fc" id="L272">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L273">        v_EdgeNotExists();</span>
+<span class="fc" id="L274">        e_Reset();</span>
+<span class="fc" id="L275">        v_MultiGraph();</span>
+<span class="fc" id="L276">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L277">        v_NodeNotExists();</span>
+<span class="fc" id="L278">        e_Reset();</span>
+<span class="fc" id="L279">        v_MultiGraph();</span>
+<span class="fc" id="L280">        e_RemoveExistentNode();</span>
+<span class="fc" id="L281">        v_NodeRemoved();</span>
+<span class="fc" id="L282">        e_Reset();</span>
+<span class="fc" id="L283">        v_MultiGraph();</span>
+<span class="fc" id="L284">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L285">        v_NodeNotExists();</span>
+<span class="fc" id="L286">        e_Reset();</span>
+<span class="fc" id="L287">        v_MultiGraph();</span>
+<span class="fc" id="L288">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L289">        v_EdgeNotExists();</span>
+<span class="fc" id="L290">        e_Reset();</span>
+<span class="fc" id="L291">        v_MultiGraph();</span>
+<span class="fc" id="L292">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L293">        v_EdgeNotExists();</span>
+<span class="fc" id="L294">        e_Reset();</span>
+<span class="fc" id="L295">        v_MultiGraph();</span>
+<span class="fc" id="L296">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L297">        v_EdgeNotExists();</span>
+<span class="fc" id="L298">        e_Reset();</span>
+<span class="fc" id="L299">        v_MultiGraph();</span>
+<span class="fc" id="L300">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L301">        v_EdgeNotExists();</span>
+<span class="fc" id="L302">        e_Reset();</span>
+<span class="fc" id="L303">        v_MultiGraph();</span>
+<span class="fc" id="L304">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L305">        v_NodeNotExists();</span>
+<span class="fc" id="L306">        e_Reset();</span>
+<span class="fc" id="L307">        v_MultiGraph();</span>
+<span class="fc" id="L308">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L309">        v_NodeNotExists();</span>
+<span class="fc" id="L310">        e_Reset();</span>
+<span class="fc" id="L311">        v_MultiGraph();</span>
+<span class="fc" id="L312">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L313">        v_EdgeNotExists();</span>
+<span class="fc" id="L314">        e_Reset();</span>
+<span class="fc" id="L315">        v_MultiGraph();</span>
+<span class="fc" id="L316">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L317">        v_EdgeNotExists();</span>
+<span class="fc" id="L318">        e_Reset();</span>
+<span class="fc" id="L319">        v_MultiGraph();</span>
+<span class="fc" id="L320">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L321">        v_EdgeNotExists();</span>
+<span class="fc" id="L322">        e_Reset();</span>
+<span class="fc" id="L323">        v_MultiGraph();</span>
+<span class="fc" id="L324">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L325">        v_EdgeNotExists();</span>
+<span class="fc" id="L326">        e_Reset();</span>
+<span class="fc" id="L327">        v_MultiGraph();</span>
+<span class="fc" id="L328">        e_AddNode();</span>
+<span class="fc" id="L329">        v_NodeCreated();</span>
+<span class="fc" id="L330">        e_Reset();</span>
+<span class="fc" id="L331">        v_MultiGraph();</span>
+<span class="fc" id="L332">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L333">        v_NodeNotExists();</span>
+<span class="fc" id="L334">        e_Reset();</span>
+<span class="fc" id="L335">        v_MultiGraph();</span>
+<span class="fc" id="L336">        e_AddExistentNode();</span>
+<span class="fc" id="L337">        v_NodeAlreadyExists();</span>
+<span class="fc" id="L338">        e_Reset();</span>
+<span class="fc" id="L339">        v_MultiGraph();</span>
+<span class="fc" id="L340">        e_RemoveExistentNode();</span>
+<span class="fc" id="L341">        v_NodeRemoved();</span>
+<span class="fc" id="L342">        e_Reset();</span>
+<span class="fc" id="L343">        v_MultiGraph();</span>
+<span class="fc" id="L344">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L345">        v_NodeNotExists();</span>
+<span class="fc" id="L346">        e_Reset();</span>
+<span class="fc" id="L347">        v_MultiGraph();</span>
+<span class="fc" id="L348">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L349">        v_NodeNotExists();</span>
+<span class="fc" id="L350">        e_Reset();</span>
+<span class="fc" id="L351">        v_MultiGraph();</span>
+<span class="fc" id="L352">        e_AddNode();</span>
+<span class="fc" id="L353">        v_NodeCreated();</span>
+<span class="fc" id="L354">        e_Reset();</span>
+<span class="fc" id="L355">        v_MultiGraph();</span>
+<span class="fc" id="L356">        e_GetNode();</span>
+<span class="fc" id="L357">        v_Node();</span>
+<span class="fc" id="L358">        e_Reset();</span>
+<span class="fc" id="L359">        v_MultiGraph();</span>
+<span class="fc" id="L360">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L361">        v_EdgeNotExists();</span>
+<span class="fc" id="L362">        e_Reset();</span>
+<span class="fc" id="L363">        v_MultiGraph();</span>
+<span class="fc" id="L364">        e_RemoveExistentNode();</span>
+<span class="fc" id="L365">        v_NodeRemoved();</span>
+<span class="fc" id="L366">        e_Reset();</span>
+<span class="fc" id="L367">        v_MultiGraph();</span>
+<span class="fc" id="L368">        e_AddNode();</span>
+<span class="fc" id="L369">        v_NodeCreated();</span>
+<span class="fc" id="L370">        e_Reset();</span>
+<span class="fc" id="L371">        v_MultiGraph();</span>
+<span class="fc" id="L372">        e_GetNode();</span>
+<span class="fc" id="L373">        v_Node();</span>
+<span class="fc" id="L374">        e_Reset();</span>
+<span class="fc" id="L375">        v_MultiGraph();</span>
+<span class="fc" id="L376">        e_GetNode();</span>
+<span class="fc" id="L377">        v_Node();</span>
+<span class="fc" id="L378">        e_Reset();</span>
+<span class="fc" id="L379">        v_MultiGraph();</span>
+<span class="fc" id="L380">        e_AddNode();</span>
+<span class="fc" id="L381">        v_NodeCreated();</span>
+<span class="fc" id="L382">        e_Reset();</span>
+<span class="fc" id="L383">        v_MultiGraph();</span>
+<span class="fc" id="L384">        e_GetNode();</span>
+<span class="fc" id="L385">        v_Node();</span>
+<span class="fc" id="L386">        e_Reset();</span>
+<span class="fc" id="L387">        v_MultiGraph();</span>
+<span class="fc" id="L388">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L389">        v_EdgeNotExists();</span>
+<span class="fc" id="L390">        e_Reset();</span>
+<span class="fc" id="L391">        v_MultiGraph();</span>
+<span class="fc" id="L392">        e_AddNode();</span>
+<span class="fc" id="L393">        v_NodeCreated();</span>
+<span class="fc" id="L394">        e_Reset();</span>
+<span class="fc" id="L395">        v_MultiGraph();</span>
+<span class="fc" id="L396">        e_AddExistentNode();</span>
+<span class="fc" id="L397">        v_NodeAlreadyExists();</span>
+<span class="fc" id="L398">        e_Reset();</span>
+<span class="fc" id="L399">        v_MultiGraph();</span>
+<span class="fc" id="L400">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L401">        v_EdgeNotExists();</span>
+<span class="fc" id="L402">        e_Reset();</span>
+<span class="fc" id="L403">        v_MultiGraph();</span>
+<span class="fc" id="L404">        e_GetNode();</span>
+<span class="fc" id="L405">        v_Node();</span>
+<span class="fc" id="L406">        e_Reset();</span>
+<span class="fc" id="L407">        v_MultiGraph();</span>
+<span class="fc" id="L408">        e_AddExistentNode();</span>
+<span class="fc" id="L409">        v_NodeAlreadyExists();</span>
+<span class="fc" id="L410">        e_Reset();</span>
+<span class="fc" id="L411">        v_MultiGraph();</span>
+<span class="fc" id="L412">        e_AddNode();</span>
+<span class="fc" id="L413">        v_NodeCreated();</span>
+<span class="fc" id="L414">        e_Reset();</span>
+<span class="fc" id="L415">        v_MultiGraph();</span>
+<span class="fc" id="L416">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L417">        v_EdgeNotExists();</span>
+<span class="fc" id="L418">        e_Reset();</span>
+<span class="fc" id="L419">        v_MultiGraph();</span>
+<span class="fc" id="L420">        e_AddEdge();</span>
+<span class="fc" id="L421">        v_EdgeCreated();</span>
+<span class="fc" id="L422">        e_Reset();</span>
+<span class="fc" id="L423">        v_MultiGraph();</span>
+<span class="fc" id="L424">        e_AddEdge();</span>
+<span class="fc" id="L425">        v_EdgeCreated();</span>
+<span class="fc" id="L426">        e_Reset();</span>
+<span class="fc" id="L427">        v_MultiGraph();</span>
+<span class="fc" id="L428">        e_GetNode();</span>
+<span class="fc" id="L429">        v_Node();</span>
+<span class="fc" id="L430">        e_Reset();</span>
+<span class="fc" id="L431">        v_MultiGraph();</span>
+<span class="fc" id="L432">        e_AddNode();</span>
+<span class="fc" id="L433">        v_NodeCreated();</span>
+<span class="fc" id="L434">        e_Reset();</span>
+<span class="fc" id="L435">        v_MultiGraph();</span>
+<span class="fc" id="L436">        e_GetEdge();</span>
+<span class="fc" id="L437">        v_Edge();</span>
+<span class="fc" id="L438">        e_Reset();</span>
+<span class="fc" id="L439">        v_MultiGraph();</span>
+<span class="fc" id="L440">        e_GetEdge();</span>
+<span class="fc" id="L441">        v_Edge();</span>
+<span class="fc" id="L442">        e_Reset();</span>
+<span class="fc" id="L443">        v_MultiGraph();</span>
+<span class="fc" id="L444">        e_RemoveNonexistentNode();</span>
+<span class="fc" id="L445">        v_NodeNotExists();</span>
+<span class="fc" id="L446">        e_Reset();</span>
+<span class="fc" id="L447">        v_MultiGraph();</span>
+<span class="fc" id="L448">        e_RemoveNonexistentEdge();</span>
+<span class="fc" id="L449">        v_EdgeNotExists();</span>
+<span class="fc" id="L450">        e_Reset();</span>
+<span class="fc" id="L451">        v_MultiGraph();</span>
+<span class="fc" id="L452">        e_AddEdge();</span>
+<span class="fc" id="L453">        v_EdgeCreated();</span>
+<span class="fc" id="L454">        e_Reset();</span>
+<span class="fc" id="L455">        v_MultiGraph();</span>
+<span class="fc" id="L456">        e_AddEdge();</span>
+<span class="fc" id="L457">        v_EdgeCreated();</span>
+<span class="fc" id="L458">        e_Reset();</span>
+<span class="fc" id="L459">        v_MultiGraph();</span>
+<span class="fc" id="L460">        e_GetEdge();</span>
+<span class="fc" id="L461">        v_Edge();</span>
+<span class="fc" id="L462">        e_Reset();</span>
+<span class="fc" id="L463">        v_MultiGraph();</span>
+<span class="fc" id="L464">        e_AddEdge();</span>
+<span class="fc" id="L465">        v_EdgeCreated();</span>
+<span class="fc" id="L466">        e_Reset();</span>
+<span class="fc" id="L467">        v_MultiGraph();</span>
+<span class="fc" id="L468">        e_RemoveExistentEdge();</span>
+<span class="fc" id="L469">        v_EdgeRemoved();</span>
+<span class="fc" id="L470">        e_Reset();</span>
+<span class="fc" id="L471">        v_MultiGraph();</span>
+<span class="fc" id="L472">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

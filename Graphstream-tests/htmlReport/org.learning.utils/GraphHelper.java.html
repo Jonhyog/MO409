@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GraphHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning.utils</a> &gt; <span class="el_source">GraphHelper.java</span></div><h1>GraphHelper.java</h1><pre class="source lang-java linenums">package org.learning.utils;
+
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
+
+import java.lang.reflect.Executable;
+import java.util.*;
+import java.util.stream.Stream;
+
+public class GraphHelper {
+    protected Random r;
+    protected HashMap&lt;String, Node&gt; nodeMap;
+    protected HashMap&lt;String, Edge&gt; edgeMap;
+    protected List&lt;Node&gt; nodes;
+    protected List&lt;Edge&gt; edges;
+    protected Node lastRemovedNode;
+    protected Edge lastRemovedEdge;
+    protected Exception capturedException;
+    protected int autoIncrement;
+
+<span class="fc" id="L21">    public GraphHelper() {</span>
+<span class="fc" id="L22">        this.r = new Random();</span>
+<span class="fc" id="L23">        this.nodeMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L24">        this.edgeMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L25">        this.nodes = new Vector&lt;&gt;();</span>
+<span class="fc" id="L26">        this.edges = new Vector&lt;&gt;();</span>
+<span class="fc" id="L27">        this.lastRemovedNode = null;</span>
+<span class="fc" id="L28">        this.lastRemovedEdge = null;</span>
+<span class="fc" id="L29">        this.autoIncrement = 0;</span>
+<span class="fc" id="L30">    }</span>
+
+    public String nextId() {
+<span class="fc" id="L33">        return Integer.toString(this.autoIncrement++);</span>
+    }
+
+    public void addNode(Node n) {
+<span class="fc" id="L37">        this.nodes.add(n);</span>
+<span class="fc" id="L38">        this.nodeMap.put(n.toString(), n);</span>
+<span class="fc" id="L39">    }</span>
+
+    public void removeNode(Node n) {
+<span class="fc" id="L42">        List&lt;String&gt; edgesKeys = new Vector&lt;&gt;();</span>
+
+<span class="fc" id="L44">        this.nodes.remove(n);</span>
+<span class="fc" id="L45">        this.nodeMap.remove(n.toString());</span>
+
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        for (Map.Entry&lt;String, Edge&gt; set : this.edgeMap.entrySet()) {</span>
+<span class="nc" id="L48">            Edge e = set.getValue();</span>
+
+<span class="nc bnc" id="L50" title="All 4 branches missed.">            if (e.getNode0() == n || e.getNode1() == n) {</span>
+<span class="nc" id="L51">                edgesKeys.add(e.toString());</span>
+            }
+<span class="nc" id="L53">        }</span>
+
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        for (String s : edgesKeys) {</span>
+<span class="nc" id="L56">            this.edgeMap.remove(s);</span>
+<span class="nc" id="L57">        }</span>
+
+<span class="fc" id="L59">        this.lastRemovedNode = n;</span>
+
+<span class="fc" id="L61">    }</span>
+
+    public void addEdge(Edge e) {
+<span class="fc" id="L64">        this.edges.add(e);</span>
+<span class="fc" id="L65">        this.edgeMap.put(e.toString(), e);</span>
+<span class="fc" id="L66">    }</span>
+
+    public void removeEdge(Edge e) {
+<span class="fc" id="L69">        this.edges.remove(e);</span>
+<span class="fc" id="L70">        this.edgeMap.remove(e.toString());</span>
+
+<span class="fc" id="L72">        this.lastRemovedEdge = e;</span>
+<span class="fc" id="L73">    }</span>
+
+    public Node getLastNode() {
+<span class="fc" id="L76">        return this.nodes.get(this.nodes.size() - 1);</span>
+    }
+
+    public Node getNode(String id) {
+<span class="nc" id="L80">        return this.nodeMap.get(id);</span>
+    }
+
+    public Node getLastRemovedNode() {
+<span class="fc" id="L84">        return  this.lastRemovedNode;</span>
+    }
+
+    public Edge getLastEdge() {
+<span class="fc" id="L88">        return this.edges.get(this.edges.size() - 1);</span>
+    }
+
+    public Edge getEdge(String id) {
+<span class="nc" id="L92">        return this.edgeMap.get(id);</span>
+    }
+
+    public Edge getLastRemovedEdge() {
+<span class="fc" id="L96">        return this.lastRemovedEdge;</span>
+    }
+
+    public Node getRandomNode() {
+<span class="fc" id="L100">        int randomIDX = this.r.nextInt(this.nodeMap.size());</span>
+<span class="fc" id="L101">        int i = 0;</span>
+
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        for (Map.Entry&lt;String, Node&gt; set : this.nodeMap.entrySet()) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">            if (i == randomIDX) {</span>
+<span class="fc" id="L105">                return set.getValue();</span>
+            }
+<span class="fc" id="L107">            i++;</span>
+<span class="fc" id="L108">        }</span>
+
+<span class="nc" id="L110">        return null;</span>
+    }
+
+    public Edge getRandomEdge() {
+<span class="fc" id="L114">        int randomIDX = this.r.nextInt(this.edgeMap.size());</span>
+<span class="fc" id="L115">        int i = 0;</span>
+
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        for (Map.Entry&lt;String, Edge&gt; set : this.edgeMap.entrySet()) {</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (i == randomIDX) {</span>
+<span class="fc" id="L119">                return set.getValue();</span>
+            }
+<span class="fc" id="L121">            i++;</span>
+<span class="fc" id="L122">        }</span>
+
+<span class="nc" id="L124">        return null;</span>
+    }
+
+    public SimpleTuple&lt;Node, Node&gt; generateRandomEdge(boolean repeat) {
+<span class="fc" id="L128">        Node vertex1 = this.getRandomNode();</span>
+<span class="fc" id="L129">        Node vertex2 = this.getRandomNode();</span>
+
+<span class="fc" id="L131">        Stream&lt;Node&gt; neighbours = vertex1.neighborNodes();</span>
+
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (repeat) {</span>
+<span class="fc" id="L134">            return new SimpleTuple&lt;&gt;(vertex1, vertex2);</span>
+        }
+
+<span class="fc bfc" id="L137" title="All 4 branches covered.">        if (neighbours.anyMatch(n -&gt; { return n == vertex2; })) {</span>
+<span class="fc" id="L138">            return this.generateRandomEdge();</span>
+        }
+
+<span class="fc" id="L141">        return new SimpleTuple&lt;&gt;(vertex1, vertex2);</span>
+    }
+
+    public SimpleTuple&lt;Node, Node&gt; generateRandomEdge() {
+<span class="fc" id="L145">        return this.generateRandomEdge(false);</span>
+    }
+
+    public void setCapturedException(Exception ex) {
+<span class="fc" id="L149">        this.capturedException = ex;</span>
+<span class="fc" id="L150">    }</span>
+
+    public Exception getCapturedException() {
+<span class="fc" id="L153">        return this.capturedException;</span>
+    }
+    public String getEdgeId(Edge e){
+<span class="fc" id="L156">        return e.toString().split(&quot;\\[&quot;)[0];</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

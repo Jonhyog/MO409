@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingleGraphPairwiseTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning</a> &gt; <span class="el_source">SingleGraphPairwiseTest.java</span></div><h1>SingleGraphPairwiseTest.java</h1><pre class="source lang-java linenums">package org.learning;
+
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L11">public class SingleGraphPairwiseTest {</span>
+/*
+*
+* +---------+----------+---------+--------+-------------+
+* | ------- | Completo | Cíclico | Conexo | Direcionado |
+* +---------+----------+---------+--------+-------------+
+* |       1 | Sim      | Sim     | Sim    | Sim         |
+* |       2 | Não      | Não     | Sim    | Sim         |
+* |       3 | Não      | Sim     | Sim    | Não         |
+* |       4 | Não      | Sim     | Não    | Sim         |
+* |       5 | Sim      | Sim     | Sim    | Não         |
+* +---------+----------+---------+--------+-------------+
+*
+ */
+
+    @Test
+    public void TC_1() {
+<span class="fc" id="L28">        Graph g = new SingleGraph(&quot;TC_1&quot;);</span>
+<span class="fc" id="L29">        String[] nodeList = {&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;};</span>
+        Node a, b;
+
+        // Creates nodes
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        for (String node : nodeList) {</span>
+<span class="fc" id="L34">            g.addNode(node);</span>
+        }
+
+        // Creates all edges
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        for (String node1 : nodeList) {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            for (String node2 : nodeList) {</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">                if (node1.equals(node2)) continue;</span>
+
+<span class="fc" id="L42">                a = g.getNode(node1);</span>
+<span class="fc" id="L43">                b = g.getNode(node2);</span>
+
+<span class="fc" id="L45">                Edge e = g.addEdge(node1 + &quot;-&quot; + node2, a, b, true);</span>
+
+                // Checks if all edges are directed
+<span class="fc" id="L48">                assertTrue(e.isDirected());</span>
+            }
+        }
+
+        // Checks if is all nodes are connected
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (String node1 : nodeList) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            for (String node2 : nodeList) {</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">                if (node1.equals(node2)) continue;</span>
+
+<span class="fc" id="L57">                a = g.getNode(node1);</span>
+<span class="fc" id="L58">                b = g.getNode(node2);</span>
+
+                // if (a --&gt; b) and (b --&gt; a) then cycle
+<span class="fc" id="L61">                assertTrue(a.hasEdgeToward(node2));</span>
+<span class="fc" id="L62">                assertTrue(b.hasEdgeToward(node1));</span>
+            }
+        }
+<span class="fc" id="L65">    }</span>
+
+    @Test
+    public void TC_2() {
+<span class="fc" id="L69">        Graph g = new SingleGraph(&quot;TC_2&quot;);</span>
+
+        // Creates nodes
+<span class="fc" id="L72">        Node A = g.addNode(&quot;A&quot;);</span>
+<span class="fc" id="L73">        Node B = g.addNode(&quot;B&quot;);</span>
+<span class="fc" id="L74">        Node C = g.addNode(&quot;C&quot;);</span>
+<span class="fc" id="L75">        Node D = g.addNode(&quot;D&quot;);</span>
+<span class="fc" id="L76">        Node E = g.addNode(&quot;E&quot;);</span>
+
+        // Creates Edges
+<span class="fc" id="L79">        Edge AB = g.addEdge(&quot;A-&gt;B&quot;, A, B, true);</span>
+<span class="fc" id="L80">        Edge BC = g.addEdge(&quot;B-&gt;C&quot;, B, C, true);</span>
+<span class="fc" id="L81">        Edge CD = g.addEdge(&quot;C-&gt;D&quot;, C, D, true);</span>
+<span class="fc" id="L82">        Edge DE = g.addEdge(&quot;D-&gt;E&quot;, D, E, true);</span>
+<span class="fc" id="L83">        Edge AE = g.addEdge(&quot;A-&gt;E&quot;, A, E, true);</span>
+
+        // Checks if there is a cycle
+<span class="fc" id="L86">        assertFalse(E.hasEdgeToward(A));</span>
+
+        // Checks if all edges are directed
+<span class="fc" id="L89">        assertTrue(AB.isDirected());</span>
+<span class="fc" id="L90">        assertTrue(BC.isDirected());</span>
+<span class="fc" id="L91">        assertTrue(CD.isDirected());</span>
+<span class="fc" id="L92">        assertTrue(DE.isDirected());</span>
+<span class="fc" id="L93">        assertTrue(AE.isDirected());</span>
+
+<span class="fc" id="L95">    }</span>
+
+    @Test
+    public void TC_3() {
+<span class="fc" id="L99">        Graph g = new SingleGraph(&quot;TC_3&quot;);</span>
+
+        // Creates nodes
+<span class="fc" id="L102">        Node A = g.addNode(&quot;A&quot;);</span>
+<span class="fc" id="L103">        Node B = g.addNode(&quot;B&quot;);</span>
+<span class="fc" id="L104">        Node C = g.addNode(&quot;C&quot;);</span>
+<span class="fc" id="L105">        Node D = g.addNode(&quot;D&quot;);</span>
+<span class="fc" id="L106">        Node E = g.addNode(&quot;E&quot;);</span>
+
+        // Creates Edges
+<span class="fc" id="L109">        Edge AB = g.addEdge(&quot;A-&gt;B&quot;, A, B, false);</span>
+<span class="fc" id="L110">        Edge BC = g.addEdge(&quot;B-&gt;C&quot;, B, C, false);</span>
+<span class="fc" id="L111">        Edge CD = g.addEdge(&quot;C-&gt;D&quot;, C, D, false);</span>
+<span class="fc" id="L112">        Edge DE = g.addEdge(&quot;D-&gt;E&quot;, D, E, false);</span>
+<span class="fc" id="L113">        Edge EA = g.addEdge(&quot;E-&gt;A&quot;, E, A, false);</span>
+
+        // Checks if there is a cycle
+<span class="fc" id="L116">        assertTrue(A.hasEdgeToward(&quot;B&quot;));</span>
+<span class="fc" id="L117">        assertTrue(B.hasEdgeToward(&quot;C&quot;));</span>
+<span class="fc" id="L118">        assertTrue(C.hasEdgeToward(&quot;D&quot;));</span>
+<span class="fc" id="L119">        assertTrue(D.hasEdgeToward(&quot;E&quot;));</span>
+<span class="fc" id="L120">        assertTrue(E.hasEdgeToward(&quot;A&quot;));</span>
+
+        // Checks if all edges are not directed
+<span class="fc" id="L123">        assertFalse(AB.isDirected());</span>
+<span class="fc" id="L124">        assertFalse(BC.isDirected());</span>
+<span class="fc" id="L125">        assertFalse(CD.isDirected());</span>
+<span class="fc" id="L126">        assertFalse(DE.isDirected());</span>
+<span class="fc" id="L127">        assertFalse(EA.isDirected());</span>
+<span class="fc" id="L128">    }</span>
+
+    @Test
+    public void TC_4() {
+<span class="fc" id="L132">        Graph g = new SingleGraph(&quot;TC_4&quot;);</span>
+
+        // Creates nodes
+<span class="fc" id="L135">        Node A = g.addNode(&quot;A&quot;);</span>
+<span class="fc" id="L136">        Node B = g.addNode(&quot;B&quot;);</span>
+<span class="fc" id="L137">        Node C = g.addNode(&quot;C&quot;);</span>
+<span class="fc" id="L138">        Node D = g.addNode(&quot;D&quot;);</span>
+
+        // Creates Edges
+<span class="fc" id="L141">        Edge AB = g.addEdge(&quot;A-&gt;B&quot;, A, B, true);</span>
+<span class="fc" id="L142">        Edge BA = g.addEdge(&quot;B-&gt;A&quot;, B, A, true);</span>
+
+<span class="fc" id="L144">        Edge CD = g.addEdge(&quot;C-&gt;D&quot;, C, D, true);</span>
+<span class="fc" id="L145">        Edge DC = g.addEdge(&quot;D-&gt;C&quot;, D, C, true);</span>
+
+        // Checks if there is a cycle
+<span class="fc" id="L148">        assertTrue(A.hasEdgeToward(&quot;B&quot;));</span>
+<span class="fc" id="L149">        assertTrue(B.hasEdgeToward(&quot;A&quot;));</span>
+
+<span class="fc" id="L151">        assertTrue(C.hasEdgeToward(&quot;D&quot;));</span>
+<span class="fc" id="L152">        assertTrue(D.hasEdgeToward(&quot;C&quot;));</span>
+
+        // Checks if all edges are directed
+<span class="fc" id="L155">        assertTrue(AB.isDirected());</span>
+<span class="fc" id="L156">        assertTrue(BA.isDirected());</span>
+
+<span class="fc" id="L158">        assertTrue(CD.isDirected());</span>
+<span class="fc" id="L159">        assertTrue(DC.isDirected());</span>
+<span class="fc" id="L160">    }</span>
+
+    @Test
+    public void TC_5() {
+<span class="fc" id="L164">        Graph g = new SingleGraph(&quot;TC_1&quot;);</span>
+<span class="fc" id="L165">        String[] nodeList = {&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;};</span>
+        Node a, b;
+
+        // Creates nodes
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        for (String node : nodeList) {</span>
+<span class="fc" id="L170">            g.addNode(node);</span>
+        }
+
+        // Creates all edges
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeList.length; i++) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            for (int j = i + 1; j &lt; nodeList.length; j++) {</span>
+<span class="fc" id="L176">                String node1 = nodeList[i];</span>
+<span class="fc" id="L177">                String node2 = nodeList[j];</span>
+
+<span class="fc" id="L179">                a = g.getNode(node1);</span>
+<span class="fc" id="L180">                b = g.getNode(node2);</span>
+
+<span class="fc" id="L182">                Edge e = g.addEdge(node1 + &quot;-&quot; + node2, a, b, false);</span>
+
+                // Checks if all edges are not directed
+<span class="fc" id="L185">                assertFalse(e.isDirected());</span>
+            }
+        }
+
+        // Checks if is all nodes are connected
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        for (String node1 : nodeList) {</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">            for (String node2 : nodeList) {</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">                if (node1.equals(node2)) continue;</span>
+
+<span class="fc" id="L194">                a = g.getNode(node1);</span>
+<span class="fc" id="L195">                b = g.getNode(node2);</span>
+
+                // if (a --&gt; b) and (b --&gt; a) then cycle
+<span class="fc" id="L198">                assertTrue(a.hasEdgeToward(node2));</span>
+<span class="fc" id="L199">                assertTrue(b.hasEdgeToward(node1));</span>
+            }
+        }
+<span class="fc" id="L202">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

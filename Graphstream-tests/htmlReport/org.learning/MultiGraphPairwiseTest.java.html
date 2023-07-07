@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MultiGraphPairwiseTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning</a> &gt; <span class="el_source">MultiGraphPairwiseTest.java</span></div><h1>MultiGraphPairwiseTest.java</h1><pre class="source lang-java linenums">package org.learning;
+
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.MultiGraph;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L11">public class MultiGraphPairwiseTest {</span>
+/*
+*
+* +---------+----------+---------+--------+-------------+-----------------+
+* | ------- | Completo | Cíclico | Conexo | Direcionado | Aresta repatida |
+* +---------+----------+---------+--------+-------------+-----------------+
+* |       1 | Sim      | Sim     | Sim    | Sim         | Sim             |
+* |       2 | Não      | Não     | Sim    | Não         | Sim             |
+* |       3 | Não      | Sim     | Não    | Sim         | Não             |
+* +---------+----------+---------+--------+-------------+-----------------+
+*
+ */
+
+    @Test
+    public void TC_1() {
+<span class="fc" id="L26">        Graph g = new MultiGraph(&quot;TC_1&quot;);</span>
+<span class="fc" id="L27">        String[] nodeList = {&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;};</span>
+        Node a, b;
+
+        // Creates nodes
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        for (String node : nodeList) {</span>
+<span class="fc" id="L32">            g.addNode(node);</span>
+        }
+
+
+        
+
+        // Creates all edges
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (String node1 : nodeList) {</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            for (String node2 : nodeList) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">                if (node1.equals(node2)) continue;</span>
+
+<span class="fc" id="L43">                a = g.getNode(node1);</span>
+<span class="fc" id="L44">                b = g.getNode(node2);</span>
+
+<span class="fc" id="L46">                Edge e = g.addEdge(node1 + &quot;-&quot; + node2, a, b, true);</span>
+
+                // Checks if all edges are directed
+<span class="fc" id="L49">                assertTrue(e.isDirected());</span>
+            }
+        }
+
+<span class="fc" id="L53">        Edge e1 = g.addEdge(&quot;AB_Copia&quot;, g.getNode(&quot;A&quot;), g.getNode(&quot;B&quot;), true);</span>
+<span class="fc" id="L54">        Edge e2 = g.addEdge(&quot;CD_Copia&quot;, g.getNode(&quot;C&quot;), g.getNode(&quot;D&quot;), true);</span>
+
+<span class="fc" id="L56">        assertTrue(e1.isDirected());</span>
+<span class="fc" id="L57">        assertTrue(e2.isDirected());</span>
+
+        // Checks if is all nodes are connected
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        for (String node1 : nodeList) {</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            for (String node2 : nodeList) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">                if (node1.equals(node2)) continue;</span>
+
+<span class="fc" id="L64">                a = g.getNode(node1);</span>
+<span class="fc" id="L65">                b = g.getNode(node2);</span>
+
+                // if (a --&gt; b) and (b --&gt; a) then cycle
+<span class="fc" id="L68">                assertTrue(a.hasEdgeToward(node2));</span>
+<span class="fc" id="L69">                assertTrue(b.hasEdgeToward(node1));</span>
+            }
+        }
+        
+
+
+<span class="fc" id="L75">    }</span>
+
+    @Test
+    public void TC_2() {
+<span class="fc" id="L79">        Graph g = new MultiGraph(&quot;TC_2&quot;);</span>
+
+        // Creates nodes
+<span class="fc" id="L82">        Node A = g.addNode(&quot;A&quot;);</span>
+<span class="fc" id="L83">        Node B = g.addNode(&quot;B&quot;);</span>
+<span class="fc" id="L84">        Node C = g.addNode(&quot;C&quot;);</span>
+<span class="fc" id="L85">        Node D = g.addNode(&quot;D&quot;);</span>
+<span class="fc" id="L86">        Node E = g.addNode(&quot;E&quot;);</span>
+
+        // Creates Edges
+<span class="fc" id="L89">        Edge AB = g.addEdge(&quot;A-B&quot;, A, B, false);</span>
+<span class="fc" id="L90">        Edge BC = g.addEdge(&quot;B-C&quot;, B, C, false);</span>
+<span class="fc" id="L91">        Edge CD = g.addEdge(&quot;C-D&quot;, C, D, false);</span>
+<span class="fc" id="L92">        Edge DE = g.addEdge(&quot;D-E&quot;, D, E, false);</span>
+
+        // Checks if there is a cycle
+<span class="fc" id="L95">        assertFalse(E.hasEdgeToward(A));</span>
+
+        // Checks if all edges are directed
+<span class="fc" id="L98">        assertFalse(AB.isDirected());</span>
+<span class="fc" id="L99">        assertFalse(BC.isDirected());</span>
+<span class="fc" id="L100">        assertFalse(CD.isDirected());</span>
+<span class="fc" id="L101">        assertFalse(DE.isDirected());</span>
+
+<span class="fc" id="L103">    }</span>
+
+
+    @Test
+    public void TC_3() {
+<span class="fc" id="L108">        Graph g = new MultiGraph(&quot;TC_3&quot;);</span>
+
+        // Creates nodes
+<span class="fc" id="L111">        Node A = g.addNode(&quot;A&quot;);</span>
+<span class="fc" id="L112">        Node B = g.addNode(&quot;B&quot;);</span>
+<span class="fc" id="L113">        Node C = g.addNode(&quot;C&quot;);</span>
+<span class="fc" id="L114">        Node D = g.addNode(&quot;D&quot;);</span>
+
+        // Creates Edges
+<span class="fc" id="L117">        Edge AB = g.addEdge(&quot;A-&gt;B&quot;, A, B, true);</span>
+<span class="fc" id="L118">        Edge BA = g.addEdge(&quot;B-&gt;A&quot;, B, A, true);</span>
+
+<span class="fc" id="L120">        Edge CD = g.addEdge(&quot;C-&gt;D&quot;, C, D, true);</span>
+<span class="fc" id="L121">        Edge DC = g.addEdge(&quot;D-&gt;C&quot;, D, C, true);</span>
+
+        // Checks if there is a cycle
+<span class="fc" id="L124">        assertTrue(A.hasEdgeToward(&quot;B&quot;));</span>
+<span class="fc" id="L125">        assertTrue(B.hasEdgeToward(&quot;A&quot;));</span>
+
+<span class="fc" id="L127">        assertTrue(C.hasEdgeToward(&quot;D&quot;));</span>
+<span class="fc" id="L128">        assertTrue(D.hasEdgeToward(&quot;C&quot;));</span>
+
+        // Checks if all edges are directed
+<span class="fc" id="L131">        assertTrue(AB.isDirected());</span>
+<span class="fc" id="L132">        assertTrue(BA.isDirected());</span>
+
+<span class="fc" id="L134">        assertTrue(CD.isDirected());</span>
+<span class="fc" id="L135">        assertTrue(DC.isDirected());</span>
+<span class="fc" id="L136">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

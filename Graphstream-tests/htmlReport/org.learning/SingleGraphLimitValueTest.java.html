@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingleGraphLimitValueTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning</a> &gt; <span class="el_source">SingleGraphLimitValueTest.java</span></div><h1>SingleGraphLimitValueTest.java</h1><pre class="source lang-java linenums">package org.learning;
+
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L9">public class SingleGraphLimitValueTest {</span>
+    public static final int DEFAULT_NODE_CAPACITY = 128;
+    public static final int DEFAULT_EDGE_CAPACITY = 1024;
+
+    @Test
+    public void nodeLimitCapacity() {
+<span class="fc" id="L15">        SingleGraph g = new SingleGraph(&quot;NodeLimit&quot;);</span>
+
+<span class="fc bfc" id="L17" title="All 2 branches covered.">        for (int i = 0; i &lt; DEFAULT_NODE_CAPACITY; i++) {</span>
+<span class="fc" id="L18">            g.addNode(Integer.toString(i));</span>
+        }
+
+<span class="fc" id="L21">        assertNotNull(g.addNode(&quot;129&quot;));</span>
+<span class="fc" id="L22">    }</span>
+
+    @Test
+    public void edgeLimitCapacity() {
+<span class="fc" id="L26">        int nodeNumber = 47;</span>
+<span class="fc" id="L27">        SingleGraph g = new SingleGraph(&quot;NodeLimit&quot;);</span>
+        Node a, b;
+
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        for (int i = 0; i &lt;= nodeNumber; i++) {</span>
+<span class="fc" id="L31">            g.addNode(Integer.toString(i));</span>
+        }
+
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeNumber; i++) {</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            for (int j = i + 1; j &lt; nodeNumber; j++) {</span>
+<span class="fc" id="L36">                a = g.getNode(Integer.toString(i));</span>
+<span class="fc" id="L37">                b = g.getNode(Integer.toString(j));</span>
+
+<span class="fc" id="L39">                g.addEdge(a.toString() + &quot;_&quot; + b.toString(), a, b, false);</span>
+            }
+        }
+
+<span class="fc" id="L43">        assertNotNull(g.addEdge(&quot;l&quot; , g.getNode(&quot;0&quot;), g.getNode(&quot;47&quot;), false));</span>
+<span class="fc" id="L44">    }</span>
+
+    @Test
+    public void nodeGettersLimitValue() {
+<span class="fc" id="L48">        int nodeQuantity = 10;</span>
+<span class="fc" id="L49">        SingleGraph g = new SingleGraph(&quot;NodeLimit&quot;);</span>
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeQuantity; i++) {</span>
+<span class="fc" id="L52">            g.addNode(Integer.toString(i));</span>
+        }
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeQuantity; i++) {</span>
+<span class="fc" id="L56">            assertEquals(Integer.toString(i), g.getNode(i).toString());</span>
+        }
+
+<span class="pc" id="L59">        assertThrows(IndexOutOfBoundsException.class, () -&gt; { g.getNode(-1); });</span>
+<span class="pc" id="L60">        assertThrows(IndexOutOfBoundsException.class, () -&gt; { g.getNode(nodeQuantity + 1); });</span>
+<span class="fc" id="L61">    }</span>
+
+    @Test
+    public void edgeGettersLimitValue() {
+<span class="fc" id="L65">        int nodeQuantity = 10;</span>
+<span class="fc" id="L66">        int edgeQuantity = (nodeQuantity * (nodeQuantity - 1)) / 2;</span>
+<span class="fc" id="L67">        SingleGraph g = new SingleGraph(&quot;EdgeLimit&quot;);</span>
+        Node a, b;
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (int i = 0; i &lt;= nodeQuantity; i++) {</span>
+<span class="fc" id="L71">            g.addNode(Integer.toString(i));</span>
+        }
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeQuantity; i++) {</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            for (int j = i + 1; j &lt; nodeQuantity; j++) {</span>
+<span class="fc" id="L76">                a = g.getNode(Integer.toString(i));</span>
+<span class="fc" id="L77">                b = g.getNode(Integer.toString(j));</span>
+
+<span class="fc" id="L79">                g.addEdge(a.toString() + &quot;_&quot; + b.toString(), a, b, false);</span>
+            }
+        }
+
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeQuantity; i++) {</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">            for (int j = i + 1; j &lt; nodeQuantity; j++) {</span>
+<span class="fc" id="L85">                String id = Integer.toString(i) + &quot;_&quot; + Integer.toString(j);</span>
+<span class="fc" id="L86">                assertEquals(id, g.getEdge(id).toString().split(&quot;\\[&quot;)[0]);</span>
+            }
+        }
+
+<span class="pc" id="L90">        assertThrows(IndexOutOfBoundsException.class, () -&gt; { g.getEdge(-1); });</span>
+<span class="pc" id="L91">        assertThrows(IndexOutOfBoundsException.class, () -&gt; { g.getEdge(edgeQuantity); });</span>
+
+<span class="fc" id="L93">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

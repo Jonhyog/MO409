@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingleGraphUnitTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning</a> &gt; <span class="el_source">SingleGraphUnitTest.java</span></div><h1>SingleGraphUnitTest.java</h1><pre class="source lang-java linenums">package org.learning;
+
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.junit.jupiter.api.*;
+import org.learning.utils.SingleGraphUt;
+
+
+import javax.sound.midi.SysexMessage;
+
+import java.util.List;
+import java.util.Vector;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L18">public class SingleGraphUnitTest {</span>
+    protected static SingleGraph graph;
+
+    @BeforeAll
+    public static void setup() {
+<span class="fc" id="L23">        String[] nodeList = {&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;G&quot;, &quot;H&quot;};</span>
+<span class="fc" id="L24">        List&lt;Node&gt; nodes = new Vector&lt;&gt;();</span>
+
+<span class="fc" id="L26">        graph = new SingleGraph(&quot;Graph&quot;);</span>
+
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        for (String nodeID : nodeList) {</span>
+<span class="fc" id="L29">            nodes.add(graph.addNode(nodeID));</span>
+        }
+
+<span class="fc" id="L32">        graph.addEdge(&quot;E1&quot;, nodes.get(0), nodes.get(1));</span>
+<span class="fc" id="L33">        graph.addEdge(&quot;E2&quot;, nodes.get(1), nodes.get(2));</span>
+<span class="fc" id="L34">        graph.addEdge(&quot;E3&quot;, nodes.get(2), nodes.get(3));</span>
+<span class="fc" id="L35">        graph.addEdge(&quot;E4&quot;, nodes.get(3), nodes.get(4));</span>
+<span class="fc" id="L36">        graph.addEdge(&quot;E5&quot;, nodes.get(4), nodes.get(5));</span>
+<span class="fc" id="L37">        graph.addEdge(&quot;E6&quot;, nodes.get(5), nodes.get(6));</span>
+
+<span class="fc" id="L39">    }</span>
+
+    @AfterAll
+    public static void teardown() {
+<span class="fc" id="L43">        graph.clear();</span>
+<span class="fc" id="L44">    }</span>
+
+    @Test
+    public void testNodeStream() {
+        Stream&lt;Node&gt; nodeStream;
+
+<span class="fc" id="L50">        nodeStream = graph.nodes();</span>
+<span class="fc" id="L51">        assertNotNull(nodeStream);</span>
+<span class="fc" id="L52">        assertTrue(nodeStream.findAny().isPresent());</span>
+
+<span class="fc" id="L54">        nodeStream = graph.nodes();</span>
+<span class="fc" id="L55">        assertNotNull(nodeStream);</span>
+<span class="fc" id="L56">        nodeStream.forEach(Assertions::assertNotNull);</span>
+<span class="fc" id="L57">    }</span>
+
+    @Test
+    public void testEdgeStream() {
+        Stream&lt;Edge&gt; edgeStream;
+
+<span class="fc" id="L63">        edgeStream = graph.edges();</span>
+<span class="fc" id="L64">        assertNotNull(edgeStream);</span>
+<span class="fc" id="L65">        assertTrue(edgeStream.findAny().isPresent());</span>
+
+<span class="fc" id="L67">        edgeStream = graph.edges();</span>
+<span class="fc" id="L68">        assertNotNull(edgeStream);</span>
+<span class="fc" id="L69">        edgeStream.forEach(Assertions::assertNotNull);</span>
+<span class="fc" id="L70">    }</span>
+
+    @Test
+    public void testGetNode() {
+<span class="fc" id="L74">        String[] nodeList = {&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;G&quot;, &quot;H&quot;};</span>
+
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (String nodeID : nodeList) {</span>
+<span class="fc" id="L77">            Node n = graph.getNode(nodeID);</span>
+
+<span class="fc" id="L79">            assertNotNull(n);</span>
+<span class="fc" id="L80">            assertEquals(nodeID, n.toString());</span>
+        }
+
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeList.length; i++) {</span>
+<span class="fc" id="L84">            Node n = graph.getNode(nodeList[i]);</span>
+
+<span class="fc" id="L86">            assertNotNull(n);</span>
+<span class="fc" id="L87">            assertEquals(nodeList[i], n.toString());</span>
+        }
+<span class="fc" id="L89">    }</span>
+
+    @Test
+    public void testGetEdge() {
+<span class="fc" id="L93">        String[] edgeList = {&quot;E1&quot;, &quot;E2&quot;, &quot;E3&quot;, &quot;E4&quot;, &quot;E5&quot;, &quot;E6&quot;};</span>
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        for (String edgeID : edgeList) {</span>
+<span class="fc" id="L96">            Edge e = graph.getEdge(edgeID);</span>
+
+<span class="fc" id="L98">            assertNotNull(e);</span>
+<span class="fc" id="L99">            assertEquals(edgeID, e.toString().split(&quot;\\[&quot;)[0]);</span>
+        }
+
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        for (int i = 0; i &lt; edgeList.length; i++) {</span>
+<span class="fc" id="L103">            Edge e = graph.getEdge(edgeList[i]);</span>
+
+<span class="fc" id="L105">            assertNotNull(e);</span>
+<span class="fc" id="L106">            assertEquals(edgeList[i], e.toString().split(&quot;\\[&quot;)[0]);</span>
+        }
+
+<span class="fc" id="L109">    }</span>
+    
+    @Test
+    public void smallerCapacity() {
+<span class="fc" id="L113">       SingleGraphUt g = new SingleGraphUt(&quot;Test&quot;, false,true,10,10);</span>
+
+<span class="fc" id="L115">       assertEquals(g.getMaxNode(),128);</span>
+<span class="fc" id="L116">       assertEquals(g.getMaxEdge(),1024);</span>
+<span class="fc" id="L117">    }</span>
+
+    @Test
+    public void largerCapacity() {
+<span class="fc" id="L121">        SingleGraphUt g = new SingleGraphUt(&quot;Test&quot;, false,true,200,2000);</span>
+
+<span class="fc" id="L123">        assertEquals(g.getMaxNode(),200);</span>
+<span class="fc" id="L124">        assertEquals(g.getMaxEdge(),2000);</span>
+<span class="fc" id="L125">    }</span>
+
+    @Test
+    public void getNodeNegative(){
+<span class="fc" id="L129">        SingleGraphUt g = new SingleGraphUt(&quot;Test&quot;, false,true,200,2000);</span>
+
+<span class="fc" id="L131">        assertEquals(g.getMaxNode(), 200);</span>
+<span class="fc" id="L132">        assertEquals(g.getMaxEdge(), 2000);</span>
+
+<span class="fc" id="L134">        g.addEdge(&quot;AB&quot;,&quot;A&quot;,&quot;B&quot;,false);</span>
+<span class="fc" id="L135">        g.addEdge(&quot;BC&quot;,&quot;B&quot;,&quot;C&quot;,false);</span>
+<span class="fc" id="L136">        g.addEdge(&quot;CD&quot;,&quot;C&quot;,&quot;D&quot;,false);</span>
+
+<span class="fc" id="L138">        assertThrows(IndexOutOfBoundsException.class, () -&gt; {</span>
+<span class="nc" id="L139">            g.getNode(-1);</span>
+<span class="nc" id="L140">        });</span>
+<span class="fc" id="L141">    }</span>
+
+    @Test
+    public void getNodeAboveLimit(){
+<span class="fc" id="L145">        SingleGraphUt g = new SingleGraphUt(&quot;Test&quot;, false,true,200,2000);</span>
+
+<span class="fc" id="L147">        assertEquals(g.getMaxNode(),200);</span>
+<span class="fc" id="L148">        assertEquals(g.getMaxEdge(),2000);</span>
+
+<span class="fc" id="L150">        g.addEdge(&quot;AB&quot;,&quot;A&quot;,&quot;B&quot;,false);</span>
+<span class="fc" id="L151">        g.addEdge(&quot;BC&quot;,&quot;B&quot;,&quot;C&quot;,false);</span>
+<span class="fc" id="L152">        g.addEdge(&quot;CD&quot;,&quot;C&quot;,&quot;D&quot;,false);</span>
+
+//        assertThrows(IndexOutOfBoundsException.class, () -&gt; {
+//            g.getNode(4);
+//        });
+<span class="fc" id="L157">    }</span>
+
+    @Test
+    public void getEdgeNegative(){
+<span class="fc" id="L161">        SingleGraphUt g = new SingleGraphUt(&quot;Test&quot;, false,true,200,2000);</span>
+
+<span class="fc" id="L163">        assertEquals(g.getMaxNode(), 200);</span>
+<span class="fc" id="L164">        assertEquals(g.getMaxEdge(), 2000);</span>
+
+<span class="fc" id="L166">        g.addEdge(&quot;AB&quot;,&quot;A&quot;,&quot;B&quot;,false);</span>
+<span class="fc" id="L167">        g.addEdge(&quot;BC&quot;,&quot;B&quot;,&quot;C&quot;,false);</span>
+<span class="fc" id="L168">        g.addEdge(&quot;CD&quot;,&quot;C&quot;,&quot;D&quot;,false);</span>
+
+<span class="fc" id="L170">        assertThrows(IndexOutOfBoundsException.class, () -&gt; {</span>
+<span class="nc" id="L171">            g.getEdge(-1);</span>
+<span class="nc" id="L172">        });</span>
+<span class="fc" id="L173">    }</span>
+
+    @Test
+    public void getEdgeAboveLimit(){
+<span class="fc" id="L177">        SingleGraphUt g = new SingleGraphUt(&quot;Test&quot;, false,true,200,2000);</span>
+
+<span class="fc" id="L179">        assertEquals(g.getMaxNode(),200);</span>
+<span class="fc" id="L180">        assertEquals(g.getMaxEdge(),2000);</span>
+
+<span class="fc" id="L182">        g.addEdge(&quot;AB&quot;,&quot;A&quot;,&quot;B&quot;,false);</span>
+<span class="fc" id="L183">        g.addEdge(&quot;BC&quot;,&quot;B&quot;,&quot;C&quot;,false);</span>
+<span class="fc" id="L184">        g.addEdge(&quot;CD&quot;,&quot;C&quot;,&quot;D&quot;,false);</span>
+
+<span class="fc" id="L186">        assertThrows(IndexOutOfBoundsException.class, () -&gt; {</span>
+<span class="nc" id="L187">            g.getEdge(4);</span>
+<span class="nc" id="L188">        });</span>
+<span class="fc" id="L189">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

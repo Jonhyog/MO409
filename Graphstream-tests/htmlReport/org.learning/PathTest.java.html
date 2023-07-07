@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PathTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning</a> &gt; <span class="el_source">PathTest.java</span></div><h1>PathTest.java</h1><pre class="source lang-java linenums">package org.learning;
+
+import org.graphstream.graph.*;
+import org.junit.jupiter.api.Test;
+import org.learning.models.PathModel;
+import org.learning.utils.PathHelper;
+import org.learning.utils.SimpleTuple;
+
+import javax.sound.midi.SysexMessage;
+import java.util.EmptyStackException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L14">public class PathTest implements PathModel {</span>
+
+<span class="fc" id="L16">    protected PathHelper helper = new PathHelper();</span>
+    protected Path p;
+
+    protected Node lastAddedNode;
+    protected Edge lastAddedEdge;
+    protected Node lastPeekNode;
+    protected Edge lastPeekEdge;
+
+    protected Node lastPopNode;
+    protected Edge lastPopEdge;
+
+    protected Graph g;
+
+    public void v_Start() {
+<span class="fc" id="L30">        assertNull(this.g);</span>
+<span class="fc" id="L31">    }</span>
+
+    public void v_NullRoot(){
+
+<span class="nc" id="L35">        Exception ex = this.helper.getCapturedException();</span>
+<span class="nc" id="L36">        assertThrows(IllegalArgumentException.class, () -&gt; { throw ex; });</span>
+
+<span class="nc" id="L38">    }</span>
+
+    public void v_NotContainsEdge() {
+
+<span class="fc" id="L42">        Exception ex = this.helper.getCapturedException();</span>
+<span class="fc" id="L43">        assertThrows(IllegalArgumentException.class, () -&gt; { throw ex; });</span>
+
+<span class="fc" id="L45">    }</span>
+    public void v_InvalidHead() {
+
+<span class="fc" id="L48">        Exception ex = this.helper.getCapturedException();</span>
+<span class="fc" id="L49">        assertThrows(IllegalArgumentException.class, () -&gt; { throw ex; });</span>
+
+<span class="fc" id="L51">    }</span>
+    public void v_EmptyStack(){
+<span class="fc" id="L53">        Exception ex = this.helper.getCapturedException();</span>
+<span class="pc" id="L54">        assertThrows(EmptyStackException.class, () -&gt; { throw ex; });</span>
+<span class="nc" id="L55">    }</span>
+
+    public void v_EmptyEdgePopException() {
+<span class="nc" id="L58">        Exception ex = this.helper.getCapturedException();</span>
+<span class="nc" id="L59">        assertThrows(EmptyStackException.class, () -&gt; { throw ex; });</span>
+<span class="nc" id="L60">    }</span>
+    public void v_PopEdge() {
+<span class="fc" id="L62">        assertEquals(this.lastPopEdge.toString(), this.helper.getLastPopEdge().toString());</span>
+<span class="fc" id="L63">    }</span>
+
+    public void v_EmptyNodePopException() {
+<span class="nc" id="L66">        Exception ex = this.helper.getCapturedException();</span>
+<span class="nc" id="L67">        assertThrows(EmptyStackException.class, () -&gt; { throw ex; });</span>
+<span class="nc" id="L68">    }</span>
+
+    public void v_PopNode(){
+<span class="fc" id="L71">        assertEquals(this.lastPopNode.toString(), this.helper.getLastPopNode().toString());</span>
+<span class="fc" id="L72">    }</span>
+
+    public void v_Path(){
+<span class="fc" id="L75">       assertNotNull(this.p);</span>
+<span class="fc" id="L76">    }</span>
+
+    public void e_CreatePath(){
+<span class="fc" id="L79">        this.p = new Path();</span>
+<span class="fc" id="L80">        this.g = helper.createSimpleGraph();</span>
+<span class="fc" id="L81">    }</span>
+
+    @Override
+    public void e_PeekWhileEmptyEdge() {
+<span class="nc" id="L85">            this.helper.setCapturedException(null);</span>
+            try
+            { 
+<span class="nc" id="L88">                p.peekEdge();</span>
+            }
+<span class="nc" id="L90">            catch (Exception ex)</span>
+            {
+<span class="nc" id="L92">                this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L93">            }</span>
+<span class="nc" id="L94">    }</span>
+
+    @Override
+    public void v_EdgePeeked() {
+<span class="fc" id="L98">        assertEquals(this.lastPeekEdge.toString(), this.helper.getLastPeekEdge().toString());</span>
+<span class="fc" id="L99">    }</span>
+
+    @Override
+    public void e_PeekWhileEmptyNode() {
+            
+<span class="fc" id="L104">            this.helper.setCapturedException(null);</span>
+            try
+            { 
+<span class="fc" id="L107">                p.peekNode();</span>
+<span class="fc" id="L108">                System.out.println(p.size());</span>
+            }
+<span class="nc" id="L110">            catch (Exception ex)</span>
+            {
+<span class="nc" id="L112">                this.helper.setCapturedException(ex);</span>
+<span class="fc" id="L113">            }</span>
+<span class="fc" id="L114">    }</span>
+
+    @Override
+    public void v_NodePeeked() {
+<span class="fc" id="L118">        assertEquals(this.lastPeekNode.toString(), this.helper.getLastPeekNode().toString());</span>
+<span class="fc" id="L119">    }</span>
+
+    public void e_Reset(){
+        //Estado de transição
+<span class="fc" id="L123">    }</span>
+
+    public void e_AddNodeEdge() {
+        //Fé
+<span class="fc" id="L127">        SimpleTuple&lt;String, String&gt; t = this.helper.getNewEdge();</span>
+<span class="fc" id="L128">        System.out.println(t);</span>
+<span class="fc" id="L129">        String a = t.x;</span>
+<span class="fc" id="L130">        String b = t.y;</span>
+
+<span class="fc" id="L132">        this.helper.addEdge(a, b);</span>
+
+<span class="fc" id="L134">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L135">        sb.append(a);</span>
+<span class="fc" id="L136">        sb.append(b);</span>
+<span class="fc" id="L137">        String str = sb.toString();</span>
+//        System.out.println(str);
+<span class="fc" id="L139">        g.addEdge(str, a, b);</span>
+
+<span class="fc" id="L141">        Node from = g.getNode(a);</span>
+//        System.out.println(System.identityHashCode(from));
+
+<span class="fc" id="L144">        Edge edge = g.getEdge(str);</span>
+
+//        System.out.println(edge);
+
+<span class="fc" id="L148">        p.add(from, edge);</span>
+<span class="fc" id="L149">        System.out.println(&quot;Test:&quot; + edge);</span>
+
+<span class="fc" id="L151">        this.lastAddedEdge = edge;</span>
+<span class="fc" id="L152">    }</span>
+
+    public void e_AddWithNullRoot() {
+        //Precisa que root != NULL
+<span class="nc" id="L156">        p.clear();</span>
+<span class="nc" id="L157">        this.helper.clear();</span>
+//        Node n = p.getRoot();
+//        p.setRoot(null);
+<span class="nc" id="L160">        this.helper.setCapturedException(null);</span>
+            try
+            { 
+<span class="nc" id="L163">                p.add(null);</span>
+            }
+<span class="nc" id="L165">            catch (Exception ex)</span>
+            {
+<span class="nc" id="L167">                this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L168">            }</span>
+<span class="nc" id="L169">    }</span>
+
+    public void e_AddNotContainsEdge() {
+        //Fé²
+        try
+        {
+<span class="fc" id="L175">            SimpleTuple&lt;String, String&gt; t = helper.getNewEdge();</span>
+<span class="fc" id="L176">            SimpleTuple&lt;String, String&gt; z = helper.getNewEdge();</span>
+
+<span class="fc" id="L178">            String a = t.x;</span>
+<span class="fc" id="L179">            String b = t.y;</span>
+
+<span class="fc" id="L181">            String c = z.x + &quot;magic&quot;;</span>
+<span class="fc" id="L182">            String d = z.y + &quot;magic&quot;;</span>
+
+<span class="fc" id="L184">            StringBuilder sb1 = new StringBuilder();</span>
+<span class="fc" id="L185">            sb1.append(a);</span>
+<span class="fc" id="L186">            sb1.append(b);</span>
+<span class="fc" id="L187">            String str1 = sb1.toString();</span>
+
+<span class="fc" id="L189">            StringBuilder sb2 = new StringBuilder();</span>
+<span class="fc" id="L190">            sb2.append(c);</span>
+<span class="fc" id="L191">            sb2.append(d);</span>
+<span class="fc" id="L192">            String str2 = sb2.toString();</span>
+
+<span class="fc" id="L194">            g.addEdge(str1, a, b);</span>
+<span class="fc" id="L195">            g.addEdge(str2, c, d);</span>
+
+<span class="fc" id="L197">            Node from = g.getNode(a);</span>
+<span class="fc" id="L198">            Edge edge = g.getEdge(str2);</span>
+
+<span class="fc" id="L200">            System.out.println(a);</span>
+<span class="fc" id="L201">            System.out.println(b);</span>
+<span class="fc" id="L202">            System.out.println(c);</span>
+<span class="fc" id="L203">            System.out.println(d);</span>
+<span class="fc" id="L204">            System.out.println(edge.getSourceNode());</span>
+<span class="fc" id="L205">            System.out.println(edge.getTargetNode());</span>
+<span class="nc" id="L206">            p.add(from, edge);</span>
+<span class="nc" id="L207">            this.lastAddedEdge = edge;</span>
+<span class="nc" id="L208">            System.out.println(&quot;Exception:&quot; + edge);</span>
+        }
+<span class="fc" id="L210">        catch (Exception ex)</span>
+        {
+<span class="fc" id="L212">          this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L213">        }</span>
+
+<span class="fc" id="L215">    }</span>
+
+    @Override
+    public void v_Add() {
+<span class="fc" id="L219">        assertEquals(p.peekEdge(), this.lastAddedEdge);</span>
+<span class="fc" id="L220">    }</span>
+
+    public void e_InvalidHead() {
+<span class="fc" id="L223">        Graph graph = this.helper.createSimpleGraph();</span>
+
+        //Não sei se isso funciona
+<span class="fc" id="L226">        graph.addEdge(&quot;ixiz&quot;, &quot;ix&quot;, &quot;iz&quot;);</span>
+        //graph.addEdge(&quot;xz&quot;, &quot;x&quot;, &quot;z&quot;);
+
+        //XZ não faz parte de p;
+<span class="fc" id="L230">        this.helper.setCapturedException(null);</span>
+        try
+        {   
+<span class="nc" id="L233">            this.p.add(graph.getEdge(&quot;ixiz&quot;));</span>
+
+        }
+<span class="fc" id="L236">        catch (Exception ex)</span>
+        {
+<span class="fc" id="L238">            this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L239">        }</span>
+<span class="fc" id="L240">    }</span>
+    public void e_PeekEdge() {
+<span class="fc" id="L242">        this.lastPeekEdge = p.peekEdge();</span>
+<span class="fc" id="L243">        helper.PeekEdge();</span>
+<span class="fc" id="L244">    }</span>
+
+    public void e_PeekNode() {
+<span class="fc" id="L247">        this.lastPeekNode = p.peekNode();</span>
+<span class="fc" id="L248">        this.helper.PeekNode();</span>
+<span class="fc" id="L249">    }</span>
+
+    public void e_PopEdge() {
+<span class="fc" id="L252">        this.lastPopEdge = p.popEdge();</span>
+<span class="fc" id="L253">        helper.PopEdge();</span>
+<span class="fc" id="L254">    }</span>
+
+    public void e_PopNode() {
+<span class="fc" id="L257">        this.lastPopNode = p.popNode();</span>
+<span class="fc" id="L258">        helper.PopNode();</span>
+<span class="fc" id="L259">    }</span>
+
+    public void e_PopWhileEmptyEdge() {
+<span class="nc" id="L262">        this.helper.setCapturedException(null);</span>
+        try
+        {
+<span class="nc" id="L265">            this.lastPopEdge = p.popEdge();</span>
+        }
+<span class="nc" id="L267">        catch (Exception ex)</span>
+        {
+<span class="nc" id="L269">            this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L270">        }</span>
+
+<span class="nc" id="L272">    }</span>
+
+    public void e_PopWhileEmptyNode() {
+
+<span class="nc" id="L276">        this.helper.setCapturedException(null);</span>
+        try
+        {
+<span class="nc" id="L279">            this.lastPeekNode = p.popNode();</span>
+        }
+<span class="nc" id="L281">        catch (Exception ex)</span>
+        {
+<span class="nc" id="L283">            this.helper.setCapturedException(ex);</span>
+<span class="nc" id="L284">        }</span>
+
+<span class="nc" id="L286">    }</span>
+
+    @Test
+    public void modelTest() {
+<span class="fc" id="L290">        v_Start();</span>
+<span class="fc" id="L291">        e_CreatePath();</span>
+<span class="fc" id="L292">        v_Path();</span>
+<span class="fc" id="L293">        e_AddNodeEdge();</span>
+<span class="fc" id="L294">        v_Add();</span>
+<span class="fc" id="L295">        e_Reset();</span>
+<span class="fc" id="L296">        v_Path();</span>
+<span class="fc" id="L297">        e_InvalidHead();</span>
+<span class="fc" id="L298">        v_InvalidHead();</span>
+<span class="fc" id="L299">        e_Reset();</span>
+<span class="fc" id="L300">        v_Path();</span>
+<span class="fc" id="L301">        e_PeekNode();</span>
+<span class="fc" id="L302">        v_NodePeeked();</span>
+<span class="fc" id="L303">        e_Reset();</span>
+<span class="fc" id="L304">        v_Path();</span>
+<span class="fc" id="L305">        e_PeekNode();</span>
+<span class="fc" id="L306">        v_NodePeeked();</span>
+<span class="fc" id="L307">        e_Reset();</span>
+<span class="fc" id="L308">        v_Path();</span>
+<span class="fc" id="L309">        e_PopNode();</span>
+<span class="fc" id="L310">        v_PopNode();</span>
+<span class="fc" id="L311">        e_Reset();</span>
+<span class="fc" id="L312">        v_Path();</span>
+<span class="fc" id="L313">        e_AddNodeEdge();</span>
+<span class="fc" id="L314">        v_Add();</span>
+<span class="fc" id="L315">        e_Reset();</span>
+<span class="fc" id="L316">        v_Path();</span>
+<span class="fc" id="L317">        e_InvalidHead();</span>
+<span class="fc" id="L318">        v_InvalidHead();</span>
+<span class="fc" id="L319">        e_Reset();</span>
+<span class="fc" id="L320">        v_Path();</span>
+<span class="fc" id="L321">        e_AddNodeEdge();</span>
+<span class="fc" id="L322">        v_Add();</span>
+<span class="fc" id="L323">        e_Reset();</span>
+<span class="fc" id="L324">        v_Path();</span>
+<span class="fc" id="L325">        e_InvalidHead();</span>
+<span class="fc" id="L326">        v_InvalidHead();</span>
+<span class="fc" id="L327">        e_Reset();</span>
+<span class="fc" id="L328">        v_Path();</span>
+<span class="fc" id="L329">        e_AddNodeEdge();</span>
+<span class="fc" id="L330">        v_Add();</span>
+<span class="fc" id="L331">        e_Reset();</span>
+<span class="fc" id="L332">        v_Path();</span>
+<span class="fc" id="L333">        e_InvalidHead();</span>
+<span class="fc" id="L334">        v_InvalidHead();</span>
+<span class="fc" id="L335">        e_Reset();</span>
+<span class="fc" id="L336">        v_Path();</span>
+<span class="fc" id="L337">        e_PeekNode();</span>
+<span class="fc" id="L338">        v_NodePeeked();</span>
+<span class="fc" id="L339">        e_Reset();</span>
+<span class="fc" id="L340">        v_Path();</span>
+<span class="fc" id="L341">        e_PeekEdge();</span>
+<span class="fc" id="L342">        v_EdgePeeked();</span>
+<span class="fc" id="L343">        e_Reset();</span>
+<span class="fc" id="L344">        v_Path();</span>
+<span class="fc" id="L345">        e_AddNotContainsEdge();</span>
+<span class="fc" id="L346">        v_NotContainsEdge();</span>
+<span class="fc" id="L347">        e_Reset();</span>
+<span class="fc" id="L348">        v_Path();</span>
+<span class="fc" id="L349">        e_InvalidHead();</span>
+<span class="fc" id="L350">        v_InvalidHead();</span>
+<span class="fc" id="L351">        e_Reset();</span>
+<span class="fc" id="L352">        v_Path();</span>
+<span class="fc" id="L353">        e_PopEdge();</span>
+<span class="fc" id="L354">        v_PopEdge();</span>
+<span class="fc" id="L355">        e_Reset();</span>
+<span class="fc" id="L356">        v_Path();</span>
+<span class="fc" id="L357">        e_AddNodeEdge();</span>
+<span class="fc" id="L358">        v_Add();</span>
+<span class="fc" id="L359">        e_Reset();</span>
+<span class="fc" id="L360">        v_Path();</span>
+<span class="fc" id="L361">        e_PeekNode();</span>
+<span class="fc" id="L362">        v_NodePeeked();</span>
+<span class="fc" id="L363">        e_Reset();</span>
+<span class="fc" id="L364">        v_Path();</span>
+<span class="fc" id="L365">        e_InvalidHead();</span>
+<span class="fc" id="L366">        v_InvalidHead();</span>
+<span class="fc" id="L367">        e_Reset();</span>
+<span class="fc" id="L368">        v_Path();</span>
+<span class="fc" id="L369">        e_PeekNode();</span>
+<span class="fc" id="L370">        v_NodePeeked();</span>
+<span class="fc" id="L371">        e_Reset();</span>
+<span class="fc" id="L372">        v_Path();</span>
+<span class="fc" id="L373">        e_PeekEdge();</span>
+<span class="fc" id="L374">        v_EdgePeeked();</span>
+<span class="fc" id="L375">        e_Reset();</span>
+<span class="fc" id="L376">        v_Path();</span>
+<span class="fc" id="L377">        e_PeekEdge();</span>
+<span class="fc" id="L378">        v_EdgePeeked();</span>
+<span class="fc" id="L379">        e_Reset();</span>
+<span class="fc" id="L380">        v_Path();</span>
+<span class="fc" id="L381">        e_AddNotContainsEdge();</span>
+<span class="fc" id="L382">        v_NotContainsEdge();</span>
+<span class="fc" id="L383">        e_Reset();</span>
+<span class="fc" id="L384">        v_Path();</span>
+<span class="fc" id="L385">        e_PeekEdge();</span>
+<span class="fc" id="L386">        v_EdgePeeked();</span>
+<span class="fc" id="L387">        e_Reset();</span>
+<span class="fc" id="L388">        v_Path();</span>
+<span class="fc" id="L389">        e_PeekNode();</span>
+<span class="fc" id="L390">        v_NodePeeked();</span>
+<span class="fc" id="L391">        e_Reset();</span>
+<span class="fc" id="L392">        v_Path();</span>
+<span class="fc" id="L393">        e_PeekEdge();</span>
+<span class="fc" id="L394">        v_EdgePeeked();</span>
+<span class="fc" id="L395">        e_Reset();</span>
+<span class="fc" id="L396">        v_Path();</span>
+<span class="fc" id="L397">        e_AddNotContainsEdge();</span>
+<span class="fc" id="L398">        v_NotContainsEdge();</span>
+<span class="fc" id="L399">        e_Reset();</span>
+<span class="fc" id="L400">        v_Path();</span>
+<span class="fc" id="L401">        e_PopNode();</span>
+<span class="fc" id="L402">        v_PopNode();</span>
+<span class="fc" id="L403">        e_Reset();</span>
+<span class="fc" id="L404">        v_Path();</span>
+<span class="fc" id="L405">        e_AddNodeEdge();</span>
+<span class="fc" id="L406">        v_Add();</span>
+<span class="fc" id="L407">        e_Reset();</span>
+<span class="fc" id="L408">        v_Path();</span>
+<span class="fc" id="L409">        e_PopEdge();</span>
+<span class="fc" id="L410">        v_PopEdge();</span>
+<span class="fc" id="L411">        e_Reset();</span>
+<span class="fc" id="L412">        v_Path();</span>
+<span class="fc" id="L413">        e_PopEdge();</span>
+<span class="fc" id="L414">        v_PopEdge();</span>
+<span class="fc" id="L415">        e_Reset();</span>
+<span class="fc" id="L416">        v_Path();</span>
+<span class="fc" id="L417">        e_AddNotContainsEdge();</span>
+<span class="fc" id="L418">        v_NotContainsEdge();</span>
+<span class="fc" id="L419">        e_Reset();</span>
+<span class="fc" id="L420">        v_Path();</span>
+<span class="fc" id="L421">        e_PeekNode();</span>
+<span class="fc" id="L422">        v_NodePeeked();</span>
+<span class="fc" id="L423">        e_Reset();</span>
+<span class="fc" id="L424">        v_Path();</span>
+<span class="fc" id="L425">        e_PeekNode();</span>
+<span class="fc" id="L426">        v_NodePeeked();</span>
+<span class="fc" id="L427">        e_Reset();</span>
+<span class="fc" id="L428">        v_Path();</span>
+<span class="fc" id="L429">        e_AddNodeEdge();</span>
+<span class="fc" id="L430">        v_Add();</span>
+<span class="fc" id="L431">        e_Reset();</span>
+<span class="fc" id="L432">        v_Path();</span>
+<span class="fc" id="L433">        e_PeekEdge();</span>
+<span class="fc" id="L434">        v_EdgePeeked();</span>
+<span class="fc" id="L435">        e_Reset();</span>
+<span class="fc" id="L436">        v_Path();</span>
+<span class="fc" id="L437">        e_PeekNode();</span>
+<span class="fc" id="L438">        v_NodePeeked();</span>
+<span class="fc" id="L439">        e_Reset();</span>
+<span class="fc" id="L440">        v_Path();</span>
+<span class="fc" id="L441">        e_AddNotContainsEdge();</span>
+<span class="fc" id="L442">        v_NotContainsEdge();</span>
+<span class="fc" id="L443">        e_Reset();</span>
+<span class="fc" id="L444">        v_Path();</span>
+<span class="fc" id="L445">        e_InvalidHead();</span>
+<span class="fc" id="L446">        v_InvalidHead();</span>
+<span class="fc" id="L447">        e_Reset();</span>
+<span class="fc" id="L448">        v_Path();</span>
+<span class="fc" id="L449">        e_AddNodeEdge();</span>
+<span class="fc" id="L450">        v_Add();</span>
+<span class="fc" id="L451">        e_Reset();</span>
+<span class="fc" id="L452">        v_Path();</span>
+<span class="fc" id="L453">        e_PeekEdge();</span>
+<span class="fc" id="L454">        v_EdgePeeked();</span>
+<span class="fc" id="L455">        e_Reset();</span>
+<span class="fc" id="L456">        v_Path();</span>
+<span class="fc" id="L457">        e_PopNode();</span>
+<span class="fc" id="L458">        v_PopNode();</span>
+<span class="fc" id="L459">        e_Reset();</span>
+<span class="fc" id="L460">        v_Path();</span>
+<span class="fc" id="L461">        e_PopEdge();</span>
+<span class="fc" id="L462">        v_PopEdge();</span>
+<span class="fc" id="L463">        e_Reset();</span>
+<span class="fc" id="L464">        v_Path();</span>
+<span class="fc" id="L465">        e_PopNode();</span>
+<span class="fc" id="L466">        v_PopNode();</span>
+<span class="fc" id="L467">        e_Reset();</span>
+<span class="fc" id="L468">        v_Path();</span>
+<span class="fc" id="L469">        e_AddNodeEdge();</span>
+<span class="fc" id="L470">        v_Add();</span>
+<span class="fc" id="L471">        e_Reset();</span>
+<span class="fc" id="L472">        v_Path();</span>
+<span class="fc" id="L473">        e_InvalidHead();</span>
+<span class="fc" id="L474">        v_InvalidHead();</span>
+<span class="fc" id="L475">        e_Reset();</span>
+<span class="fc" id="L476">        v_Path();</span>
+<span class="fc" id="L477">        e_InvalidHead();</span>
+<span class="fc" id="L478">        v_InvalidHead();</span>
+<span class="fc" id="L479">        e_Reset();</span>
+<span class="fc" id="L480">        v_Path();</span>
+<span class="fc" id="L481">        e_PeekEdge();</span>
+<span class="fc" id="L482">        v_EdgePeeked();</span>
+<span class="fc" id="L483">        e_Reset();</span>
+<span class="fc" id="L484">        v_Path();</span>
+<span class="fc" id="L485">        e_AddNodeEdge();</span>
+<span class="fc" id="L486">        v_Add();</span>
+<span class="fc" id="L487">        e_Reset();</span>
+<span class="fc" id="L488">        v_Path();</span>
+<span class="fc" id="L489">        e_AddNodeEdge();</span>
+<span class="fc" id="L490">        v_Add();</span>
+<span class="fc" id="L491">        e_Reset();</span>
+<span class="fc" id="L492">        v_Path();</span>
+<span class="fc" id="L493">        e_PeekNode();</span>
+<span class="fc" id="L494">        v_NodePeeked();</span>
+<span class="fc" id="L495">        e_Reset();</span>
+<span class="fc" id="L496">        v_Path();</span>
+<span class="fc" id="L497">        e_PeekEdge();</span>
+<span class="fc" id="L498">        v_EdgePeeked();</span>
+<span class="fc" id="L499">        e_Reset();</span>
+<span class="fc" id="L500">        v_Path();</span>
+<span class="fc" id="L501">        e_PopNode();</span>
+<span class="fc" id="L502">        v_PopNode();</span>
+<span class="fc" id="L503">        e_Reset();</span>
+<span class="fc" id="L504">        v_Path();</span>
+<span class="fc" id="L505">        e_PopEdge();</span>
+<span class="fc" id="L506">        v_PopEdge();</span>
+<span class="fc" id="L507">        e_Reset();</span>
+<span class="fc" id="L508">        v_Path();</span>
+<span class="fc" id="L509">        e_AddNodeEdge();</span>
+<span class="fc" id="L510">        v_Add();</span>
+<span class="fc" id="L511">        e_Reset();</span>
+<span class="fc" id="L512">        v_Path();</span>
+<span class="fc" id="L513">        e_PopNode();</span>
+<span class="fc" id="L514">        v_PopNode();</span>
+<span class="fc" id="L515">        e_Reset();</span>
+<span class="fc" id="L516">        v_Path();</span>
+<span class="fc" id="L517">        e_PopNode();</span>
+<span class="fc" id="L518">        v_PopNode();</span>
+<span class="fc" id="L519">        e_Reset();</span>
+<span class="fc" id="L520">        v_Path();</span>
+<span class="fc" id="L521">        e_PeekWhileEmptyNode();</span>
+<span class="nc" id="L522">        v_EmptyStack();</span>
+<span class="nc" id="L523">        e_Reset();</span>
+<span class="nc" id="L524">        v_Path();</span>
+<span class="nc" id="L525">        e_AddWithNullRoot();</span>
+<span class="nc" id="L526">        v_NullRoot();</span>
+<span class="nc" id="L527">        e_Reset();</span>
+<span class="nc" id="L528">        v_Path();</span>
+<span class="nc" id="L529">        e_PopWhileEmptyNode();</span>
+<span class="nc" id="L530">        v_EmptyNodePopException();</span>
+<span class="nc" id="L531">        e_Reset();</span>
+<span class="nc" id="L532">        v_Path();</span>
+<span class="nc" id="L533">        e_PopWhileEmptyEdge();</span>
+<span class="nc" id="L534">        v_EmptyEdgePopException();</span>
+<span class="nc" id="L535">        e_Reset();</span>
+<span class="nc" id="L536">        v_Path();</span>
+<span class="nc" id="L537">        e_PeekWhileEmptyEdge();</span>
+<span class="nc" id="L538">        v_EmptyStack();</span>
+<span class="nc" id="L539">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingleGraphEqClassTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning</a> &gt; <span class="el_source">SingleGraphEqClassTest.java</span></div><h1>SingleGraphEqClassTest.java</h1><pre class="source lang-java linenums">package org.learning;
+
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.junit.jupiter.api.Test;
+import org.learning.utils.NodeStub;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L10">public class SingleGraphEqClassTest {</span>
+    
+   
+    
+    @Test
+    public void TC_1(){
+
+<span class="fc" id="L17">        SingleGraph g = new SingleGraph(&quot;EPO&quot;);</span>
+
+<span class="fc" id="L19">        Node A = g.addNode(&quot;A&quot;);</span>
+<span class="fc" id="L20">        Node B = g.addNode(&quot;B&quot;);</span>
+<span class="fc" id="L21">        Node C = g.addNode(&quot;C&quot;);</span>
+<span class="fc" id="L22">        Node D = g.addNode(&quot;D&quot;);</span>
+
+<span class="fc" id="L24">        NodeStub _A = new NodeStub(A, g);</span>
+<span class="fc" id="L25">        NodeStub _B = new NodeStub(B, g);</span>
+<span class="fc" id="L26">        NodeStub _C = new NodeStub(C, g);</span>
+<span class="fc" id="L27">        NodeStub _D = new NodeStub(D, g);</span>
+
+<span class="fc" id="L29">        _A.addEdge(A, B,true, _B);</span>
+<span class="fc" id="L30">        _B.addEdge(B, C,true, _C);</span>
+
+<span class="fc" id="L32">        assertTrue(_A.isSameEdge(A));</span>
+<span class="fc" id="L33">        assertTrue(_B.isSameEdge(B));</span>
+<span class="fc" id="L34">        assertTrue(_C.isSameEdge(C));</span>
+<span class="fc" id="L35">        assertTrue(_D.isSameEdge(D));</span>
+
+<span class="fc" id="L37">        assertEquals(4, g.getNodeCount());</span>
+<span class="fc" id="L38">        assertEquals(2, g.getEdgeCount());</span>
+<span class="fc" id="L39">    }</span>
+
+    @Test
+    public void TC_2(){
+
+<span class="fc" id="L44">        SingleGraph g = new SingleGraph(&quot;EPO&quot;);</span>
+
+<span class="fc" id="L46">        Node A = g.addNode(&quot;A&quot;);</span>
+<span class="fc" id="L47">        Node B = g.addNode(&quot;B&quot;);</span>
+<span class="fc" id="L48">        Node C = g.addNode(&quot;C&quot;);</span>
+
+<span class="fc" id="L50">        NodeStub _A = new NodeStub(A,g);</span>
+<span class="fc" id="L51">        NodeStub _B = new NodeStub(B,g);</span>
+<span class="fc" id="L52">        NodeStub _C = new NodeStub(C,g);</span>
+
+
+<span class="fc" id="L55">        _A.addEdge(A,B,false,_B);</span>
+<span class="fc" id="L56">        _B.addEdge(B,C,false,_C);</span>
+<span class="fc" id="L57">        _C.addEdge(C,A,false,_A);</span>
+
+<span class="fc" id="L59">        assertTrue(_A.isSameEdge(A));</span>
+<span class="fc" id="L60">        assertTrue(_B.isSameEdge(B));</span>
+<span class="fc" id="L61">        assertTrue(_C.isSameEdge(C));</span>
+
+<span class="fc" id="L63">        assertEquals(3, g.getNodeCount());</span>
+<span class="fc" id="L64">        assertEquals(3, g.getEdgeCount());</span>
+<span class="fc" id="L65">    }</span>
+
+    @Test
+    public void TC_3(){
+        // ¯\_(ツ)_/¯
+<span class="fc" id="L70">        SingleGraph g = null;</span>
+<span class="fc" id="L71">        assertNull(g);</span>
+<span class="fc" id="L72">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

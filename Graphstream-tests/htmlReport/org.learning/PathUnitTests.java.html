@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PathUnitTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning</a> &gt; <span class="el_source">PathUnitTests.java</span></div><h1>PathUnitTests.java</h1><pre class="source lang-java linenums">package org.learning;
+
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.Path;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.junit.jupiter.api.*;
+
+import java.util.List;
+import java.util.Vector;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+<span class="fc" id="L16">public class PathUnitTests {</span>
+    protected static SingleGraph g;
+    protected static Path p1;
+    protected static Path p2;
+
+    @BeforeAll
+    public static void setup() {
+<span class="fc" id="L23">        String[] nodeList = {&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;G&quot;, &quot;H&quot;};</span>
+<span class="fc" id="L24">        List&lt;Node&gt; nodes = new Vector&lt;&gt;();</span>
+
+<span class="fc" id="L26">        g = new SingleGraph(&quot;Graph&quot;);</span>
+<span class="fc" id="L27">        p1 = new Path();</span>
+<span class="fc" id="L28">        p2 = new Path();</span>
+
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        for (String nodeID : nodeList) {</span>
+<span class="fc" id="L31">            nodes.add(g.addNode(nodeID));</span>
+        }
+
+<span class="fc" id="L34">        g.addNode(&quot;Lorem&quot;);</span>
+<span class="fc" id="L35">        g.addNode(&quot;Dolor&quot;);</span>
+<span class="fc" id="L36">        g.addEdge(&quot;Ipsum&quot;, g.getNode(&quot;Lorem&quot;), g.getNode(&quot;Dolor&quot;));</span>
+
+
+<span class="fc" id="L39">        g.addEdge(&quot;E1&quot;, nodes.get(0), nodes.get(1));</span>
+<span class="fc" id="L40">        g.addEdge(&quot;E2&quot;, nodes.get(1), nodes.get(2));</span>
+<span class="fc" id="L41">        g.addEdge(&quot;E3&quot;, nodes.get(2), nodes.get(3));</span>
+<span class="fc" id="L42">        g.addEdge(&quot;E4&quot;, nodes.get(3), nodes.get(4));</span>
+<span class="fc" id="L43">        g.addEdge(&quot;E5&quot;, nodes.get(4), nodes.get(5));</span>
+<span class="fc" id="L44">        g.addEdge(&quot;E6&quot;, nodes.get(5), nodes.get(6));</span>
+
+<span class="fc" id="L46">        p1.setRoot(nodes.get(0));</span>
+<span class="fc" id="L47">        p2.setRoot(nodes.get(0));</span>
+
+<span class="fc" id="L49">        p1.add(nodes.get(0), g.getEdge(&quot;E1&quot;));</span>
+<span class="fc" id="L50">        p2.add(nodes.get(0), g.getEdge(&quot;E1&quot;));</span>
+
+<span class="fc" id="L52">        p1.add(nodes.get(1), g.getEdge(&quot;E2&quot;));</span>
+<span class="fc" id="L53">        p2.add(nodes.get(1), g.getEdge(&quot;E2&quot;));</span>
+
+<span class="fc" id="L55">        p1.add(nodes.get(2), g.getEdge(&quot;E3&quot;));</span>
+<span class="fc" id="L56">        p2.add(nodes.get(2), g.getEdge(&quot;E3&quot;));</span>
+
+<span class="fc" id="L58">        p1.add(nodes.get(3), g.getEdge(&quot;E4&quot;));</span>
+<span class="fc" id="L59">        p2.add(nodes.get(3), g.getEdge(&quot;E4&quot;));</span>
+
+<span class="fc" id="L61">        p1.add(nodes.get(4), g.getEdge(&quot;E5&quot;));</span>
+<span class="fc" id="L62">        p2.add(nodes.get(4), g.getEdge(&quot;E5&quot;));</span>
+
+<span class="fc" id="L64">        p1.add(nodes.get(5), g.getEdge(&quot;E6&quot;));</span>
+<span class="fc" id="L65">        p2.add(nodes.get(5), g.getEdge(&quot;E6&quot;));</span>
+
+<span class="fc" id="L67">    }</span>
+
+    @AfterAll
+    public static void teardown() {
+<span class="fc" id="L71">        g.clear();</span>
+<span class="fc" id="L72">        p1.clear();</span>
+<span class="fc" id="L73">        p2.clear();</span>
+<span class="fc" id="L74">    }</span>
+
+    @Test
+    @Order(1)
+    public void testGetRoot() {
+<span class="fc" id="L79">        assertNotNull(p1.getRoot());</span>
+<span class="fc" id="L80">        assertNotNull(p2.getRoot());</span>
+
+<span class="fc" id="L82">        assertEquals(g.getNode(&quot;A&quot;), p1.getRoot());</span>
+<span class="fc" id="L83">        assertEquals(g.getNode(&quot;A&quot;), p2.getRoot());</span>
+<span class="fc" id="L84">    }</span>
+
+    @Test
+    @Order(2)
+    public void testContainsNode() {
+<span class="fc" id="L89">        assertTrue(p1.contains(g.getNode(&quot;C&quot;)));</span>
+<span class="fc" id="L90">        assertTrue(p2.contains(g.getNode(&quot;C&quot;)));</span>
+
+<span class="fc" id="L92">        assertFalse(p1.contains(g.getNode(&quot;Lorem&quot;)));</span>
+<span class="fc" id="L93">        assertFalse(p2.contains(g.getNode(&quot;Dolor&quot;)));</span>
+<span class="fc" id="L94">    }</span>
+
+    @Test
+    @Order(3)
+    public void testContainsEdge() {
+<span class="fc" id="L99">        assertTrue(p1.contains(g.getEdge(&quot;E5&quot;)));</span>
+<span class="fc" id="L100">        assertTrue(p2.contains(g.getEdge(&quot;E5&quot;)));</span>
+
+<span class="fc" id="L102">        assertFalse(p1.contains(g.getEdge(&quot;Ipsum&quot;)));</span>
+<span class="fc" id="L103">        assertFalse(p2.contains(g.getEdge(&quot;Ipsum&quot;)));</span>
+<span class="fc" id="L104">    }</span>
+
+    @Test
+    @Order(4)
+    public void testEmpty() {
+<span class="fc" id="L109">        Path p3 = new Path();</span>
+
+<span class="fc" id="L111">        assertFalse(p1.empty());</span>
+<span class="fc" id="L112">        assertFalse(p2.empty());</span>
+<span class="fc" id="L113">        assertTrue(p3.empty());</span>
+<span class="fc" id="L114">    }</span>
+
+    @Test
+    @Order(5)
+    public void testSize() {
+<span class="fc" id="L119">        Path p3 = new Path();</span>
+
+<span class="fc" id="L121">        assertEquals(7, p1.size());</span>
+<span class="fc" id="L122">        assertEquals(7, p2.size());</span>
+<span class="fc" id="L123">        assertEquals(0, p3.size());</span>
+<span class="fc" id="L124">    }</span>
+
+    @Test
+    @Order(6)
+    public void testGetNodeCount() {
+<span class="fc" id="L129">        Path p3 = new Path();</span>
+
+<span class="fc" id="L131">        assertEquals(0, p3.getNodeCount());</span>
+<span class="fc" id="L132">        assertEquals(7, p1.getNodeCount());</span>
+<span class="fc" id="L133">        assertEquals(7, p2.getNodeCount());</span>
+<span class="fc" id="L134">    }</span>
+
+    @Test
+    @Order(7)
+    public void testGetEdgeCount() {
+<span class="fc" id="L139">        Path p3 = new Path();</span>
+
+<span class="fc" id="L141">        assertEquals(0, p3.getNodeCount());</span>
+<span class="fc" id="L142">        assertEquals(6, p1.getEdgeCount());</span>
+<span class="fc" id="L143">        assertEquals(6, p2.getEdgeCount());</span>
+<span class="fc" id="L144">    }</span>
+
+    @Test
+    @Order(8)
+    public void testGetEdgePath() {
+        int i;
+<span class="fc" id="L150">        String[] expected = {&quot;E1&quot;, &quot;E2&quot;, &quot;E3&quot;, &quot;E4&quot;, &quot;E5&quot;, &quot;E6&quot;};</span>
+
+<span class="fc" id="L152">        List&lt;Edge&gt; edgePath1 = p1.getEdgePath();</span>
+<span class="fc" id="L153">        List&lt;Edge&gt; edgePath2 = p2.getEdgePath();</span>
+
+<span class="fc" id="L155">        assertFalse(edgePath1.isEmpty());</span>
+<span class="fc" id="L156">        assertFalse(edgePath2.isEmpty());</span>
+
+<span class="fc" id="L158">        i = 0;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        for (Edge e : edgePath1) {</span>
+<span class="fc" id="L160">            assertNotNull(e);</span>
+<span class="fc" id="L161">            assertEquals(expected[i], e.toString().split(&quot;\\[&quot;)[0]);</span>
+<span class="fc" id="L162">            i++;</span>
+<span class="fc" id="L163">        }</span>
+
+<span class="fc" id="L165">        i = 0;</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        for (Edge e : edgePath2) {</span>
+<span class="fc" id="L167">            assertNotNull(e);</span>
+<span class="fc" id="L168">            assertEquals(expected[i], e.toString().split(&quot;\\[&quot;)[0]);</span>
+<span class="fc" id="L169">            i++;</span>
+<span class="fc" id="L170">        }</span>
+<span class="fc" id="L171">    }</span>
+
+    @Test
+    @Order(9)
+    public void testGetNodePath() {
+        int i;
+<span class="fc" id="L177">        String[] expected = {&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;G&quot;, &quot;H&quot;};</span>
+
+<span class="fc" id="L179">        List&lt;Node&gt; nodePath1 = p1.getNodePath();</span>
+<span class="fc" id="L180">        List&lt;Node&gt; nodePath2 = p2.getNodePath();</span>
+
+<span class="fc" id="L182">        assertFalse(nodePath1.isEmpty());</span>
+<span class="fc" id="L183">        assertFalse(nodePath2.isEmpty());</span>
+
+<span class="fc" id="L185">        i = 0;</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        for (Node n : nodePath1) {</span>
+<span class="fc" id="L187">            assertNotNull(n);</span>
+<span class="fc" id="L188">            assertEquals(expected[i], n.toString());</span>
+<span class="fc" id="L189">            i++;</span>
+<span class="fc" id="L190">        }</span>
+
+<span class="fc" id="L192">        i = 0;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        for (Node n : nodePath2) {</span>
+<span class="fc" id="L194">            assertNotNull(n);</span>
+<span class="fc" id="L195">            assertEquals(expected[i], n.toString());</span>
+<span class="fc" id="L196">            i++;</span>
+<span class="fc" id="L197">        }</span>
+
+<span class="fc" id="L199">    }</span>
+
+    @Test
+    @Order(10)
+    public void testGetNodeStream() {
+        Stream&lt;Node&gt; nodeStream1;
+        Stream&lt;Node&gt; nodeStream2;
+
+<span class="fc" id="L207">        nodeStream1 = p1.nodes();</span>
+<span class="fc" id="L208">        assertNotNull(nodeStream1);</span>
+<span class="fc" id="L209">        assertTrue(nodeStream1.findAny().isPresent());</span>
+
+<span class="fc" id="L211">        nodeStream1 = p1.nodes();</span>
+<span class="fc" id="L212">        assertNotNull(nodeStream1);</span>
+<span class="fc" id="L213">        nodeStream1.forEach(Assertions::assertNotNull);</span>
+
+<span class="fc" id="L215">        nodeStream2 = p2.nodes();</span>
+<span class="fc" id="L216">        assertNotNull(nodeStream2);</span>
+<span class="fc" id="L217">        assertTrue(nodeStream2.findAny().isPresent());</span>
+
+<span class="fc" id="L219">        nodeStream2 = p2.nodes();</span>
+<span class="fc" id="L220">        assertNotNull(nodeStream2);</span>
+<span class="fc" id="L221">        nodeStream2.forEach(Assertions::assertNotNull);</span>
+<span class="fc" id="L222">    }</span>
+
+    @Test
+    @Order(11)
+    public void testGetEdgeStream() {
+        Stream&lt;Edge&gt; edgeStream1;
+        Stream&lt;Edge&gt; edgeStream2;
+
+<span class="fc" id="L230">        edgeStream1 = p1.edges();</span>
+<span class="fc" id="L231">        assertNotNull(edgeStream1);</span>
+<span class="fc" id="L232">        assertTrue(edgeStream1.findAny().isPresent());</span>
+
+<span class="fc" id="L234">        edgeStream1 = p1.edges();</span>
+<span class="fc" id="L235">        assertNotNull(edgeStream1);</span>
+<span class="fc" id="L236">        edgeStream1.forEach(Assertions::assertNotNull);</span>
+
+<span class="fc" id="L238">        edgeStream2 = p2.edges();</span>
+<span class="fc" id="L239">        assertNotNull(edgeStream2);</span>
+<span class="fc" id="L240">        assertTrue(edgeStream2.findAny().isPresent());</span>
+
+<span class="fc" id="L242">        edgeStream2 = p1.edges();</span>
+<span class="fc" id="L243">        assertNotNull(edgeStream2);</span>
+<span class="fc" id="L244">        edgeStream2.forEach(Assertions::assertNotNull);</span>
+<span class="fc" id="L245">    }</span>
+
+    @Test
+    @Order(12)
+    public void testPopEdge() {
+<span class="fc" id="L250">        Edge e1 = p1.popEdge();</span>
+<span class="fc" id="L251">        Edge e2 = p2.popEdge();</span>
+
+<span class="fc" id="L253">        assertNotNull(e1);</span>
+<span class="fc" id="L254">        assertNotNull(e2);</span>
+
+<span class="fc" id="L256">        assertEquals(&quot;E6&quot;, e1.toString().split(&quot;\\[&quot;)[0]);</span>
+<span class="fc" id="L257">        assertEquals(&quot;E6&quot;, e2.toString().split(&quot;\\[&quot;)[0]);</span>
+<span class="fc" id="L258">    }</span>
+
+    @Test
+    @Order(13)
+    public void testPopNode() {
+<span class="fc" id="L263">        Node n1 = p1.popNode();</span>
+<span class="fc" id="L264">        Node n2 = p2.popNode();</span>
+
+<span class="fc" id="L266">        assertNotNull(n1);</span>
+<span class="fc" id="L267">        assertNotNull(n2);</span>
+
+<span class="fc" id="L269">        assertEquals(&quot;G&quot;, n1.toString());</span>
+<span class="fc" id="L270">        assertEquals(&quot;G&quot;, n2.toString());</span>
+<span class="fc" id="L271">    }</span>
+
+    @Test
+    @Order(14)
+    public void testPeekEdge() {
+<span class="fc" id="L276">        Edge e1 = p1.peekEdge();</span>
+<span class="fc" id="L277">        Edge e2 = p2.peekEdge();</span>
+
+<span class="fc" id="L279">        assertNotNull(e1);</span>
+<span class="fc" id="L280">        assertNotNull(e2);</span>
+
+<span class="fc" id="L282">        assertEquals(&quot;E4&quot;, e1.toString().split(&quot;\\[&quot;)[0]);</span>
+<span class="fc" id="L283">        assertEquals(&quot;E4&quot;, e2.toString().split(&quot;\\[&quot;)[0]);</span>
+<span class="fc" id="L284">    }</span>
+
+    @Test
+    @Order(15)
+    public void testPeekNode() {
+<span class="fc" id="L289">        Node n1 = p1.peekNode();</span>
+<span class="fc" id="L290">        Node n2 = p2.peekNode();</span>
+
+<span class="fc" id="L292">        assertNotNull(n1);</span>
+<span class="fc" id="L293">        assertNotNull(n2);</span>
+
+<span class="fc" id="L295">        assertEquals(&quot;E&quot;, n1.toString());</span>
+<span class="fc" id="L296">        assertEquals(&quot;E&quot;, n2.toString());</span>
+<span class="fc" id="L297">    }</span>
+
+
+    @Test
+    @Order(16)
+    public void testEquals() {
+<span class="fc" id="L303">        Path p3 = new Path();</span>
+
+<span class="fc" id="L305">        assertFalse(p1.equals(p3));</span>
+<span class="fc" id="L306">        assertFalse(p3.equals(p1));</span>
+
+<span class="fc" id="L308">        assertFalse(p2.equals(p3));</span>
+<span class="fc" id="L309">        assertFalse(p3.equals(p2));</span>
+
+<span class="fc" id="L311">        assertTrue(p1.equals(p2));</span>
+<span class="fc" id="L312">        assertTrue(p2.equals(p1));</span>
+<span class="fc" id="L313">    }</span>
+
+    @Test
+    @Order(17)
+    public void testClear() {
+<span class="fc" id="L318">        assertFalse(p1.empty());</span>
+<span class="fc" id="L319">        assertFalse(p2.empty());</span>
+
+<span class="fc" id="L321">        p1.clear();</span>
+<span class="fc" id="L322">        p2.clear();</span>
+
+<span class="fc" id="L324">        assertEquals(0, p1.size());</span>
+<span class="fc" id="L325">        assertEquals(0, p2.size());</span>
+
+<span class="fc" id="L327">        assertNull(p1.getRoot());</span>
+<span class="fc" id="L328">        assertNull(p2.getRoot());</span>
+<span class="fc" id="L329">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

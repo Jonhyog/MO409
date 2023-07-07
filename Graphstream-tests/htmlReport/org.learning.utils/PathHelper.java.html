@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PathHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Whole project Coverage Results</a> &gt; <a href="index.source.html" class="el_package">org.learning.utils</a> &gt; <span class="el_source">PathHelper.java</span></div><h1>PathHelper.java</h1><pre class="source lang-java linenums">package org.learning.utils;
+
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
+
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Path;
+import org.graphstream.graph.implementations.DefaultGraph;
+
+import java.lang.reflect.Executable;
+import java.util.*;
+import java.util.stream.Stream;
+
+public class PathHelper {
+    protected int autoIncrement;
+
+<span class="fc" id="L17">    protected Stack&lt;Node&gt; nodePath = new Stack&lt;Node&gt;();</span>
+<span class="fc" id="L18">    protected Stack&lt;Edge&gt; edgePath = new Stack&lt;Edge&gt;();</span>
+
+
+    protected Node lastPeekNode;
+    protected Edge lastPeekEdge;
+
+    protected Node lastPopNode;
+    protected Edge lastPopEdge;
+
+    protected Node lastAddedNode;
+    protected Edge lastAddedEdge;
+
+    protected Graph g;
+
+
+    protected Exception capturedException;
+<span class="fc" id="L34">    public PathHelper() {</span>
+
+<span class="fc" id="L36">        this.autoIncrement = 0;</span>
+<span class="fc" id="L37">        this.g = createSimpleGraph();</span>
+<span class="fc" id="L38">    }</span>
+
+    public String nextId() {
+<span class="nc" id="L41">        return Integer.toString(this.autoIncrement++);</span>
+	}
+
+    public Graph createSimpleGraph() {
+<span class="fc" id="L45">        Graph graph = new DefaultGraph(&quot;test&quot;);</span>
+<span class="fc" id="L46">        graph.setStrict(false);</span>
+<span class="fc" id="L47">        graph.setAutoCreate(true);</span>
+
+
+<span class="fc" id="L50">        return graph;</span>
+    }
+
+    public Edge getLastPeekEdge() {
+<span class="fc" id="L54">        return this.lastPeekEdge;</span>
+    }
+
+    public Node getLastPeekNode() {
+<span class="fc" id="L58">        return this.lastPeekNode;</span>
+    }
+
+    public Node getLastPopNode() {
+<span class="fc" id="L62">        return this.lastPopNode;</span>
+    }
+
+    public Edge getLastPopEdge() {
+<span class="fc" id="L66">        return this.lastPopEdge;</span>
+    }
+
+
+    public void addEdge(String a, String b){
+
+
+<span class="fc" id="L73">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L74">        sb.append(a);</span>
+<span class="fc" id="L75">        sb.append(b);</span>
+<span class="fc" id="L76">        String str = sb.toString();</span>
+<span class="fc" id="L77">        g.addEdge(str, a, b);</span>
+
+<span class="fc" id="L79">        Edge edge = g.getEdge(str);</span>
+<span class="fc" id="L80">        Node from = g.getNode(a);</span>
+        //nodePath.push(edge.getOpposite(from));
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (nodePath.size() == 0) {</span>
+<span class="fc" id="L83">            this.nodePath.push(from);</span>
+        }
+
+<span class="fc" id="L86">        this.nodePath.push(edge.getOpposite(from));</span>
+<span class="fc" id="L87">		this.edgePath.push(edge);</span>
+<span class="fc" id="L88">        this.lastAddedEdge = edge;</span>
+<span class="fc" id="L89">        this.lastAddedNode = edge.getOpposite(from);</span>
+
+<span class="fc" id="L91">        System.out.println(&quot;Helper:&quot; + edge);</span>
+<span class="fc" id="L92">    }</span>
+
+    public SimpleTuple&lt;String, String&gt; getNewEdge(){
+        String a;
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (nodePath.size() == 0) {</span>
+<span class="fc" id="L97">            a = Integer.toString(autoIncrement);</span>
+        }
+        else
+        {
+<span class="fc" id="L101">            a = nodePath.peek().toString();</span>
+        }
+//        String a = Integer.toString(autoIncrement);
+<span class="fc" id="L104">        String b = Integer.toString(++autoIncrement);</span>
+<span class="fc" id="L105">        SimpleTuple&lt;String, String&gt; t = new SimpleTuple&lt;String, String&gt;(a,b);</span>
+
+<span class="fc" id="L107">        return t;</span>
+    }
+
+    public Edge getLastAddedEdge() {
+<span class="nc" id="L111">        return this.lastAddedEdge;</span>
+    }
+
+    private Node getPathHead(){
+<span class="nc" id="L115">        return null;</span>
+    }
+
+    public void PeekEdge() {
+<span class="fc" id="L119">        this.lastPeekEdge = edgePath.peek();</span>
+<span class="fc" id="L120">    }</span>
+    public void PeekNode() {
+<span class="fc" id="L122">        this.lastPeekNode = nodePath.peek();</span>
+<span class="fc" id="L123">    }</span>
+
+    public void PopEdge() {
+<span class="fc" id="L126">        this.lastPopNode = this.nodePath.pop();</span>
+<span class="fc" id="L127">        this.lastPopEdge = this.edgePath.pop();</span>
+
+        
+<span class="fc" id="L130">    }</span>
+    public void PopNode() {
+<span class="fc" id="L132">        this.lastPopNode = this.nodePath.pop();</span>
+<span class="fc" id="L133">        this.lastPopEdge = this.edgePath.pop();</span>
+
+<span class="fc" id="L135">    }</span>
+
+    public void clear() {
+<span class="nc" id="L138">        this.nodePath.clear();</span>
+<span class="nc" id="L139">        this.edgePath.clear();</span>
+<span class="nc" id="L140">    }</span>
+
+    public void setCapturedException(Exception ex) {
+<span class="fc" id="L143">        this.capturedException = ex;</span>
+<span class="fc" id="L144">    }</span>
+
+    public Exception getCapturedException() {
+<span class="fc" id="L147">        return this.capturedException;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
