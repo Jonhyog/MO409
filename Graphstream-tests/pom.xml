@@ -145,7 +145,8 @@
             <param>org.learning.MultiGraphLimitValueTest</param>
             <param>org.learning.PathLimitValueTest</param>
             <param>org.learning.SingleGraphPairwiseTest</param>
-            <param>org.learning.SingleGraphUnitTests</param>
+            <param>org.learning.SingleGraphUnitTest</param>
+            <param>org.learning.MultiGraphUnitTest</param>
             <param>org.learning.PathUnitTests</param>
           </targetTests>
         </configuration>
