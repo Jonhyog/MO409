@@ -1,20 +1,9 @@
 package org.learning;
 
-import org.graphstream.graph.ElementNotFoundException;
-import org.graphstream.graph.IdAlreadyInUseException;
 import org.graphstream.graph.Node;
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.graph.implementations.SingleNode;
 import org.junit.jupiter.api.Test;
-import org.learning.models.MultiGraphModel;
-import org.learning.utils.GraphHelper;
 import org.learning.utils.NodeStub;
-import org.learning.utils.SimpleTuple;
-
-import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

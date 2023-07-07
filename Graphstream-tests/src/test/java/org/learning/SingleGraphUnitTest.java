@@ -151,9 +151,9 @@ public class SingleGraphUnitTest {
         g.addEdge("BC","B","C",false);
         g.addEdge("CD","C","D",false);
 
-//        assertThrows(IndexOutOfBoundsException.class, () -> {
-//            g.getNode(4);
-//        });
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            g.getNode(4);
+        });
     }
 
     @Test
