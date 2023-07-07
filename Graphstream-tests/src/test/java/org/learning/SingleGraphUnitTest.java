@@ -1,60 +1,64 @@
 package org.learning;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
-import org.graphstream.graph.Path;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.junit.jupiter.api.*;
+import org.learning.utils.SingleGraphUt;
 
-import java.util.List;
-import java.util.Vector;
-import java.util.stream.Stream;
+
+import javax.sound.midi.SysexMessage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SingleGraphUnityTests {
+public class SingleGraphUnitTest {
     protected static SingleGraph g;
 
-
     @Test
-    public static void smallerCapacity() {
+    public void smallerCapacity() {
+       SingleGraphUt g = new SingleGraphUt("Test", false,true,10,10);
 
-       SingleGraphUt g = new SingleGraph("Test", false,true,10,10);
-       assertEqual(g.getMaxNode(),128);
-       assertEqual(g.getMaxEdge(),1024);
-
-    }
-    @Test
-    public static void largerCapacity() {
-
-        SingleGraphUt g = new SingleGraph("Test", false,true,200,2000);
-        assertEqual(g.getMaxNode(),200);
-        assertEqual(g.getMaxEdge(),2000);
-
+       assertEquals(g.getMaxNode(),128);
+       assertEquals(g.getMaxEdge(),1024);
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
-    public static void getNodeNegative(){
-        SingleGraph g = new SingleGraph("Test", false,true,200,2000);
-        assertEqual(g.getMaxNode(),200);
-        assertEqual(g.getMaxEdge(),2000);
+    @Test
+    public void largerCapacity() {
+        SingleGraphUt g = new SingleGraphUt("Test", false,true,200,2000);
+
+        assertEquals(g.getMaxNode(),200);
+        assertEquals(g.getMaxEdge(),2000);
+    }
+
+    @Test
+    public void getNodeNegative(){
+        SingleGraphUt g = new SingleGraphUt("Test", false,true,200,2000);
+
+        assertEquals(g.getMaxNode(), 200);
+        assertEquals(g.getMaxEdge(), 2000);
+
         g.addEdge("AB","A","B",false);
         g.addEdge("BC","B","C",false);
         g.addEdge("CD","C","D",false);
-        g.getNode(-1);
-        
 
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            g.getNode(-1);
+        });
     }
-    @Test(expected = IndexOutOfBoundsException.class)
-    public static void getNodeAboveLimite(){
-        SingleGraph g = new SingleGraph("Test", false,true,200,2000);
-        assertEqual(g.getMaxNode(),200);
-        assertEqual(g.getMaxEdge(),2000);
+
+    @Test
+    public void getNodeAboveLimit(){
+        SingleGraphUt g = new SingleGraphUt("Test", false,true,200,2000);
+
+        assertEquals(g.getMaxNode(),200);
+        assertEquals(g.getMaxEdge(),2000);
+
         g.addEdge("AB","A","B",false);
         g.addEdge("BC","B","C",false);
         g.addEdge("CD","C","D",false);
-        g.getNode(4);
 
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            System.out.println(g.getNode(4));
+        });
     }
+
     
 }

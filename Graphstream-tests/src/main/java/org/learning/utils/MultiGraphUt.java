@@ -1,7 +1,15 @@
-public class SingleGraphUt extends SingleGraph {
+package org.learning.utils;
+
+import org.graphstream.graph.implementations.AbstractEdge;
+import org.graphstream.graph.implementations.AbstractNode;
+import org.graphstream.graph.implementations.SingleGraph;
+
+import java.util.HashMap;
+
+public class MultiGraphUt extends SingleGraph {
 
 
-   public SingleGraphUt(String id, boolean strictChecking, boolean autoCreate, int initialNodeCapacity, int initialEdgeCapacity) {	
+   public MultiGraphUt(String id, boolean strictChecking, boolean autoCreate, int initialNodeCapacity, int initialEdgeCapacity) {
 		super(id,strictChecking, autoCreate,initialNodeCapacity,initialEdgeCapacity);
    }
 
@@ -12,7 +20,7 @@ public class SingleGraphUt extends SingleGraph {
     return this.edgeArray.length;
    }
    
-   public HashMap<String, AbstractNode>  getNodeMap(){
+   public HashMap<String, AbstractNode> getNodeMap(){
     return this.nodeMap;
    }
    public HashMap<String, AbstractEdge>  getEdgeMap(){

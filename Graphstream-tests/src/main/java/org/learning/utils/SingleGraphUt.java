@@ -1,3 +1,12 @@
+package org.learning.utils;
+
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.AbstractEdge;
+import org.graphstream.graph.implementations.AbstractNode;
+import org.graphstream.graph.implementations.SingleGraph;
+
+import java.util.HashMap;
+
 public class SingleGraphUt extends SingleGraph {
 
 
@@ -15,7 +24,7 @@ public class SingleGraphUt extends SingleGraph {
    public HashMap<String, AbstractNode>  getNodeMap(){
     return this.nodeMap;
    }
-   public HashMap<String, AbstractEdge>  getEdgeMap(){
+   public HashMap<String, AbstractEdge> getEdgeMap(){
     return this.edgeMap;
    }
 
