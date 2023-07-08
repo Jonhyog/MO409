@@ -1,6 +1,0 @@
-[submodule "gs-core"]
-	path = gs-core
-	url = git@github.com:graphstream/gs-core.git
-[submodule "pandoc-template"]
-	path = pandoc-template
-	url = git@github.com:Wandmalfarbe/pandoc-latex-template.git
