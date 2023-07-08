@@ -4,8 +4,7 @@ Este repositório é utilizado para documentar o desenvolvimento do projeto fina
 
 ## Objetivos:
 
-Este projeto busca desenvolver as habilidades de desenvolvimento de testes utilizando técnicas baseadas em domínios e em estados a problema real. Para isso será utilizada a biblioteca [`GraphStream`](https://graphstream-project.org/) como base para a geração dos testes. De com o site, a biblioteca `GraphStream` é 
-> uma biblioteca para modelagem e análise de grafos dinâmicos.
+O projeto foi elaborado com o objetivo de colocar em prática o conhecimento obtido na disciplina MO409/MC646 Engenharia de  *Software* I - Verificação, Validação e Testes de  *Software* para um cenário real. Para isso, foi elaborado um estudo de caso na disciplina que envolve a biblioteca GraphStream, a qual oferece uma *Interface de Programação de Aplicativos* (API) para geração, modificação e análise de grafos. O desenvolvimento do projeto contribuiu para aprimorar os conhecimentos sobre todas as etapas que envolvem a realização de testes, e para delinear todas as etapas do desenvolvimento do projeto.
 
 ## Membros:
 
@@ -18,7 +17,6 @@ Este projeto busca desenvolver as habilidades de desenvolvimento de testes utili
 Para desenvolver e aplicar os testes são utilizadas as seguintes ferramentas:
 
 * Geração de Classes de Equivalência: [Equivalence Partition Organizer](https://sourceforge.net/projects/equivalencepart/)
-* Geração de Tabelas de Decisão: [Decision Table Creator](https://sourceforge.net/projects/decisiontablecr/)
 * Geração de Testes Pairwise: [Pairwise Online Tool](https://pairwise.teremokgames.com/)
 * Testes Baseados em Modelos de Estado: [GraphWaker](https://graphwalker.github.io/)
 * Análise de Cobertura de Código: [Java Code Coverage Library](https://github.com/jacoco/jacoco)
